@@ -15,6 +15,36 @@ Code Helper는 간단한 코드 플레이 그라운드에 GPT-3.5를 직접 통�
 - `/styles`: 코드 에디터 및 추가 UI 컴포넌트 스타일링을 위한 CSS 파일을 저장합니다.
 - `index.html`: 애플리케이션의 메인 HTML 구조가 있는 진입점입니다.
 
+```mermaid
+flowchart TB
+    subgraph HTML ["HTML"]
+        domLoaded("DOMContentLoaded Event")
+        editorTabs["Editor Tabs (HTML, CSS, JS)"]
+        previewFrame["Preview Iframe"]
+    end
+
+    subgraph JS ["main.js"]
+        initEditors["Initialize Editors (HTML, CSS, JS)"]
+        collectData["Collect Editor Data"]
+        sendData["Send Data to API"]
+        updatePreview["Update Preview"]
+        localStorage["Update LocalStorage"]
+    end
+
+    domLoaded -->|User interacts| editorTabs
+    editorTabs --> initEditors
+    initEditors -->|Edit content| collectData
+    collectData -->|Ctrl+Enter| sendData
+    sendData -->|API Response| updatePreview
+    collectData -->|Change event| localStorage
+    updatePreview --> previewFrame
+
+    classDef htmlNode fill:#f9f,stroke:#333,stroke-width:4px;
+    classDef jsNode fill:#bbf,stroke:#333,stroke-width:2px;
+    class HTML htmlNode;
+    class JS jsNode;
+```
+
 ## 사용 스택
 
 - `TailwindCSS` : 유틸리티 퍼스트 CSS 프레임워크로 간편한 프리셋과 적은 용량, 높은 자유도를 가졌습니다. 여기서는 빠른 개발을 위해 차용하였습니다.
