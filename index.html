@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Grid Chat App</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <link rel="stylesheet" href="./styles/reset.css" />
+    <link rel="stylesheet" href="./styles/darkMode.css" />
+    <link rel="stylesheet" href="./styles/common.css" />
+    <!-- CodeMirror 핵심 스타일시트 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/darcula.min.css"
+    />
+    <!-- 힌트 기능을 위한 스타일시트 -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css"
+    />
+    <!-- Codemirror Lint CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/lint/lint.min.css"
+    />
+
+    <!-- CodeMirror 핵심 JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+
+    <!-- 필요한 모드와 힌트 애드온 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/htmlmixed/htmlmixed.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/xml-hint.min.js"></script>
+    <!-- XML 힌트 추가 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/html-hint.min.js"></script>
+    <!-- Auto Close Tags 애드온 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closetag.min.js"></script>
+    <!-- Codemirror Lint Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/lint/lint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/lint/html-lint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/lint/css-lint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/lint/javascript-lint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/lint/json-lint.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/lint/yaml-lint.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"
+      integrity="sha512-5g2Nj3mqLOgClHi20oat1COW7jWvf7SyqnvwWUsMDwhjHeqeTl0C+uzjucLweruQxHbhDwiPLXlm8HBO0011pA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body data-theme="dark" class="text-gray-300 px-20">
+    <div
+      class="chat-container w-full mx-auto my-5 p-5 border border-gray-600 rounded"
+    >
+      <ul
+        class="chat-list list-none p-0 m-0 overflow-auto max-h-75 min-h-[100px]"
+      ></ul>
+
+      <form class="chat-form flex name='post'">
+        <!-- <input
+          class="chat-input flex-1 p-2 mr-2 border border-gray-600 rounded"
+          type="text"
+          autofocus
+        /> -->
+        <input class="hidden" />
+        <button
+          type="submit"
+          class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          전송
+        </button>
+      </form>
+      <button class="theme-toggle mt-4 block p-2 mx-auto cursor-pointer">
+        다크 모드 전환
+      </button>
+    </div>
+
+    <div class="loading-overlay hidden">로딩중입니다.</div>
+
+    <textarea id="code-editor" class="hidden"></textarea>
+
+    <iframe
+      id="preview"
+      class="w-full h-48 border border-gray-300 mt-5 bg-white"
+    ></iframe>
+
+    <script type="module" src="./scripts/index.js"></script>
+    <script src="./scripts/themeToggle.js"></script>
+  </body>
+</html>
