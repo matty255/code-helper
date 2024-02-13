@@ -68,11 +68,8 @@ document.addEventListener("DOMContentLoaded", function () {
   Object.entries(editors).forEach(([lang, editor]) => {
     editor.on("change", () => {
       const content = editor.getValue();
-      if (content.trim() === "" && ["html", "css", "js"].includes(lang)) {
-        alert(`${lang.toUpperCase()} 에디터가 비어 있습니다.`);
-        return;
-      }
-      localStorage.setItem(lang, content);
+      // 빈 에디터 검사 및 경고 코드 제거
+      localStorage.setItem(lang, content); // 내용이 변경될 때마다 로컬 스토리지에 저장
     });
   });
 
@@ -129,4 +126,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 초기 에디터 설정: HTML 에디터만 보이게 하기
   selectTab("html", editors);
+
+  function updatePreview() {
+    const htmlContent = editors.html.getValue();
+    const cssContent = `<style>${editors.css.getValue()}</style>`;
+    const jsContent = `<script>${editors.js.getValue()}</script>`;
+
+    const previewFrame = document.getElementById("preview");
+    const preview =
+      previewFrame.contentDocument || previewFrame.contentWindow.document;
+    preview.open();
+    preview.write(htmlContent + cssContent + jsContent); // HTML, CSS, JS 내용을 합쳐서 프리뷰에 적용
+    preview.close();
+  }
+
+  // 에디터 내용 변경 이벤트에 프리뷰 업데이트 함수 연결
+  Object.entries(editors).forEach(([_, editor]) => {
+    editor.on("change", updatePreview);
+  });
+
+  // 초기 프리뷰 업데이트
+  updatePreview();
 });
