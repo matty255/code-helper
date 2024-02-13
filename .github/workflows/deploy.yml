@@ -1,0 +1,30 @@
+name: Deploy Static Site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: "14"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Echo Secrets
+        run: npm run echo-secrets
+
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages # GitHub Pages가 사용하는 브랜치
+          folder: . # 배포할 폴더 위치, 여기서는 루트 디렉토리를 가정
+          token: ${{ secrets.G_TOKEN }} # GitHub에서 제공하는 토큰 사용

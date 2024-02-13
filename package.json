@@ -1,0 +1,17 @@
+{
+  "name": "code-helper",
+  "version": "1.0.0",
+  "description": "A simple static site for code.",
+  "scripts": {
+    "echo-secrets": "echo Using secret: $SECRET_KEY"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "tailwindcss": "^3.4.1"
+  },
+  "dev-dependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
