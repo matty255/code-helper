@@ -1,5 +1,7 @@
 # Code Helper: Real-time GPT-3.5 Integration for Code Editors
 
+![code-helper](./assets/images/banners/[code-helper]banner.png)
+
 Code Helper는 간단한 코드 플레이 그라운드에 GPT-3.5를 직접 통합하였습니다. GPT-3.5가 생산하는 코드를 눈으로 확인하며 작업할 수 있으며, 매 요청은 local storage에 저장되어 간단히 불러올 수 있습니다.
 
 ## 기능
@@ -30,9 +32,9 @@ gantt
     ai api와 연결             :done,     des8, after des7, 2h
 
     section 디자인
-    컬러 스킴 및 폰트 결정     :         des9, 02-14, 2h
+    컬러 스킴 및 폰트 결정     :done,         des9, 02-14, 2h
     로고 및 브랜딩 자료 디자인 :         des10, after des9, 2h
-    와이어프레임 작성          :         des11, after des10, 4h
+    와이어프레임 작성          :done,         des11, after des10, 4h
     UI 프로토타입 제작         :         des12, after des11, 4h
 
     section 프로젝트 리뷰 및 마무리
@@ -89,6 +91,10 @@ flowchart TB
 
 ## 디자인
 
+- 베타테스트 중인 [오븐](https://ovenapp.io/)으로 제작.
+
+[프로젝트 공유 주소](https://ovenapp.io/project/LLeTcbHXVAF1Ik78vYsnXZaYn2XP2Aqr#ILUPO)
+
 ### 와이어프레임
 
 ![와이어프레임](./assets/images/frames/[code-helper]wire-frame.png)
@@ -109,4 +115,4 @@ git clone https://github.com/matty255/code-helper.git cd code-helper
 
 ## 사용 방법
 
-코드 에디터에서 타이핑을 시작하면 GPT-3.5 제안을 볼 수 있습니다. 키보드를 떠나지 않고 실시간 도움을 받으려면 `Shift+Enter` 단축키를 사용하세요.
+코드 에디터에서 타이핑을 시작하면 GPT-3.5 제안을 볼 수 있습니다. 키보드를 떠나지 않고 실시간 도움을 받으려면 `Ctrl+Enter` 단축키를 사용하세요.
