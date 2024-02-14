@@ -30,12 +30,14 @@ gantt
     section 개발 시작
     라이브러리 개인화          :done,      des7, 02-13, 4h
     ai api와 연결             :done,     des8, after des7, 2h
+    새로운 기능 추가             :    des8, 02-14, 6h
+
 
     section 디자인
     컬러 스킴 및 폰트 결정     :done,         des9, 02-14, 2h
-    로고 및 브랜딩 자료 디자인 :         des10, after des9, 2h
+    로고 및 브랜딩 자료 디자인 :done,        des10, after des9, 2h
     와이어프레임 작성          :done,         des11, after des10, 4h
-    UI 프로토타입 제작         :         des12, after des11, 4h
+    UI 프로토타입 제작         :done,         des12, after des11, 4h
 
     section 프로젝트 리뷰 및 마무리
     코드 리뷰                 :         des13, 02-15, 2h
@@ -47,9 +49,11 @@ gantt
 ## 폴더 구조
 
 - `./assets`: 프로젝트에 들어가는 asset 파일을 보관합니다.
-- `/constants`: 프로젝트 설정을 위한 상수 값을 보관합니다.
-- `/scripts`: API 상호작용 및 UI 동적 기능을 포함하는 JavaScript 파일이 들어 있습니다.
-- `/styles`: 코드 에디터 및 추가 UI 컴포넌트 스타일링을 위한 CSS 파일을 저장합니다.
+- `./constants`: 프로젝트 설정을 위한 상수 값을 보관합니다.
+- `./instances`: 클래스로 만들어 재사용할 객체들을 여기에 보관합니다.
+- `./scripts`: 코드의 실행을 담당하는 event 관련 JavaScript 파일이 들어 있습니다.
+- `./utils`: 간단한 유틸 함수들이 들어 있습니다.
+- `./styles`: 코드 에디터 및 추가 UI 컴포넌트 스타일링을 위한 CSS 파일을 저장합니다.
 - `index.html`: 애플리케이션의 메인 HTML 구조가 있는 진입점입니다.
 
 ```mermaid
