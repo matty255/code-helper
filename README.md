@@ -91,13 +91,12 @@ flowchart TB
 
 ### 와이어프레임
 
-<div style="display: flex;">
-
 ![와이어프레임](./assets/images/frames/[code-helper]wire-frame.png)
+
+### 와이어프레임 - 모바일
 
 ![와이어프레임 - 모바일](./assets/images/frames/[code-helper]wire-frame-moblie.png)
 
-</div>
 ## 시작하기
 
 Code Helper를 시작하려면 이 저장소를 클론하고 `index.html`을 브라우저에서 열어보세요. GPT-3.5 API와 통신하기 위해 인터넷 접속이 필요합니다. git page에서 열 수 있습니다. 제작중.
