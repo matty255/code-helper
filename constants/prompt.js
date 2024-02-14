@@ -2,33 +2,32 @@ export const prompt = [
   {
     id: "system-prompt-1",
     role: "system",
-    content: `For every request, generate a response strictly in JSON format. Do not use template literals as it may cause an pause error. Use escape characters to maintain the beauty of the HTML structure with proper indentation and line breaks. The JSON object must always include 'html' and 'description' keys. Optionally, 'css' and 'js' keys can be added for styling and scripting, but ensure that CSS content is wrapped within <style> tags and JavaScript content within <script> tags before including them in the 'html' key. The 'description' key should provide a concise explanation of the HTML content. Always ensure responses are returned in JSON to standardize the presentation of HTML, CSS, and JavaScript content. Please ensure to properly escape special characters when converting content into a JSON string format. This is crucial to prevent parsing errors and to ensure that the JSON can be correctly interpreted and processed. Here are key points to consider:
+    content: `For every request, responses should be strictly in JSON format focusing solely on HTML content. The JSON object must always include 'html' and 'description' keys, excluding 'css' and 'js' keys to ensure simplicity and reliance on HTML alone. The 'description' key should provide a clear explanation of the HTML content. To facilitate continuous data fetching with promise chaining, include a placeholder at the end of HTML content for potential follow-up requests. This placeholder is "<p>다음 요청에서 계속됩니다.</p>" for indicating ongoing content delivery. Pay special attention to JSON string formatting:
 
-    - Escape Special Characters: In JSON strings, certain characters like double quotes ("), backslashes (\), and control characters (e.g., newlines \n, tabs \t) must be escaped with a backslash (\). For example, a double quote within a string should be written as \" and a backslash should be written as \\.
-
-    - Newlines and Tabs: When including newlines or tabs in JSON strings, use \n for a newline and \t for a tab. Ensure these are also properly escaped if your context requires it (e.g., "\\n" in some programming environments).
-
-    - JSON.parse Compatibility: If you plan to parse the JSON string with JSON.parse(), verify that all special characters are correctly escaped to avoid syntax errors. This ensures the string can be converted back into a JSON object or array without issues.
-
-    - Avoiding Common Mistakes:
+    - Escape Special Characters: Ensure characters like double quotes (\\"), backslashes (\\\\), and control characters (\n, \t) are escaped.
     
-      * Do not use single quotes (') to delimit JSON strings; always use double quotes (").
-      * Ensure that every opening brace {, bracket [, double quote ", and escape character \ is properly matched and correctly placed within the string.
-
-    Example of a properly escaped JSON string containing HTML content with CSS in <style> tags and JavaScript in <script> tags for a comprehensive and standardized presentation of web content.`,
+    - Use \n for newlines and \t for tabs to maintain the readability of the HTML structure within the JSON string.
+    
+    - Ensure compatibility with JSON.parse() by correctly escaping all special characters.
+    
+    Properly escaping characters is crucial to avoid parsing errors and ensure the JSON can be correctly interpreted. Here's an emphasis on HTML content delivery without CSS and JavaScript, and how to prepare for promise chaining by incorporating a specific placeholder.`,
   },
   {
     id: "system-prompt-2",
     role: "user",
-    content: "멋진 웹사이트를 만들어주세요. 고양이가 있는 간단한 사이트",
+    content: "Create a simple website featuring a cat.",
+  },
+  {
+    id: "system-prompt-2",
+    role: "user",
+    content: "멋진 웹사이트를 만들어주세요. 고양이가 있는 간단한 사이트.",
   },
   {
     id: "system-prompt-3",
     role: "assistant",
-    content:
-      '{"description": "고양이 이미지를 포함한 간단한 HTML 컨텐츠입니다.", "html": "<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>고양이</title>\n  <style>\n    img {\n      width: 300px;\n      height: auto;\n      display: block;\n      margin: 0 auto;\n    }\n  </style>\n</head>\n<body>\n  <h1>고양이 사진</h1>\n  <img src="https://placekitten.com/400/300" alt="고양이 사진">\n</body>\n</html>"}',
+    content: `{"description": "고양이 이미지를 포함한 간단한 HTML 컨텐츠입니다.", "html": "<!DOCTYPE html>\n<html lang="en">\n<head>\n  <meta charset="UTF-8">\n  <title>고양이</title>\n  <style>\n    img {\n      width: 300px;\n      height: auto;\n      display: block;\n      margin: 0 auto;\n    }\n  </style>\n</head>\n<body>\n  <h1>고양이 사진</h1>\n  <img src="https://placekitten.com/400/300" alt="고양이 사진">\n</body>\n</html>"}`,
   },
 ];
 
 export const validJSONPrompt =
-  "Remember to keep your HTML structured and beautiful with proper indentation and line breaks, ensuring CSS is within <style> tags and JavaScript within <script> tags.";
+  "Ensure your JSON responses are properly formatted, focusing on HTML content. Remember to escape special characters and include a clear description of the HTML content. For handling large datasets, use promise chaining with a placeholder indicating continuation for subsequent requests. This approach standardizes the delivery of HTML content in a manageable and efficient manner.";

@@ -42,3 +42,13 @@ export function parseQuestionContent(content) {
     return content;
   }
 }
+
+export function isJSON(str) {
+  if (str === null || str === undefined) return false;
+  try {
+    JSON.parse(str);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}

@@ -48,6 +48,8 @@ export default class UiGenerator {
     li.classList.add("chat-item", "chat-answer");
     li.dataset.id = answer.id;
 
+    console.log(answer);
+
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
     deleteButton.style.width = "100px"; // 스타일 추가
