@@ -107,7 +107,10 @@ document.addEventListener("DOMContentLoaded", function () {
       js: editors.js.getValue(),
     };
 
-    console.log("Sending code data to API:", codeData);
+    console.log(
+      "Sending code data to API:",
+      addCodeDataToConversation(codeData)
+    );
 
     try {
       const apiResponse = await postToApi(addCodeDataToConversation(codeData)); // API 요청 보내기
