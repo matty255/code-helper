@@ -85,3 +85,28 @@ body {
   margin: auto;
   position: fixed;
 }
+.splitter {
+  width: 10px;
+  cursor: ew-resize;
+  background-color: #000;
+  position: relative;
+  z-index: 10;
+}
+
+#iframe-container {
+  position: relative;
+}
+
+#iframe-container .splitter {
+  left: -5px;
+  top: 0;
+  bottom: 0;
+}
+
+#chat-section {
+  overflow: auto;
+}
+
+#editor-section {
+  overflow: auto;
+}
