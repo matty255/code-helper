@@ -5,6 +5,12 @@ import { hideLoadingOverlay, showLoadingOverlay } from "./uiService.js";
 let conversationData =
   JSON.parse(localStorage.getItem("conversationData")) || prompt;
 
+// uiElements 객체 정의
+const uiElements = {
+  questionList: document.getElementById("question-list"), // 사용자 질문을 표시할 요소
+  answerList: document.getElementById("answer-list"), // 시스템 답변을 표시할 요소
+};
+
 // 코드 데이터를 JSON 문자열로 변환하고 conversationData에 추가하는 함수
 function addCodeDataToConversation(codeData) {
   // 코드 데이터를 문자열로 변환
@@ -147,4 +153,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 초기 프리뷰 업데이트
   updatePreview();
+
+  // 사용자 입력과 에디터 내용을 결합하여 제출하는 함수
+  async function handleSubmit() {
+    const userInput = document.getElementById("user-input").value; // 사용자 입력 필드에서 값 가져오기
+    const editorContent = [
+      editors.html.getValue(),
+      editors.css.getValue(),
+      editors.js.getValue(),
+    ].join(""); // HTML, CSS, JS 에디터의 내용을 결합
+
+    // 사용자 입력 또는 에디터 내용 중 하나라도 비어 있지 않은 경우 처리
+    const submissionValue =
+      userInput.trim() || editorContent.trim() ? userInput + editorContent : "";
+
+    if (!submissionValue) {
+      console.error("No content to submit.");
+      return; // 제출할 내용이 없으면 함수 종료
+    }
+
+    showLoadingOverlay(); // 로딩 오버레이 표시
+
+    // API 제출 로직 (가정)
+    try {
+      const apiResponse = await postToApi({ content: submissionValue });
+      console.log("API response:", apiResponse);
+      // API 응답에 따른 처리 로직...
+    } catch (error) {
+      console.error("Error sending content to API:", error);
+    } finally {
+      hideLoadingOverlay(); // 로딩 오버레이 숨기기
+    }
+  }
+
+  // '제출' 버튼 클릭 이벤트 리스너
+  document.getElementById("submit-btn").addEventListener("click", handleSubmit);
+
+  // 에디터에 'Ctrl + Enter' 키 이벤트 리스너 추가
+  Object.values(editors).forEach((editor) => {
+    editor.setOption("extraKeys", {
+      "Ctrl-Enter": handleSubmit, // 컨트롤 + 엔터를 누르면 실행
+    });
+  });
 });
