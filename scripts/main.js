@@ -1,205 +1,139 @@
-import { prompt, validJSONPrompt } from "../constants/prompt.js";
-import LocalStorageService from "./LocalStorage.js"; // LocalStorageService import
-import UiGenerator from "./UiGenerator.js";
+// main.js
+import { prompt } from "../constants/prompt.js";
+import ConversationService from "../instances/ConversationService.js";
+import EditorService from "../instances/EditorService.js";
+import UiGenerator from "../instances/UiGenerator.js";
+import {
+  createUserData,
+  ensureProperEncodingAndEscaping,
+  removeIdFromData,
+} from "../utils/utils.js";
 import { postToApi } from "./apiService.js";
 
-let conversationData = LocalStorageService.getData("conversationData", prompt); // 로컬 스토리지에서 데이터 가져오기
-
-// uiElements 객체 정의
 const ChatUI = new UiGenerator();
 
-window.addEventListener("load", () => {
-  // conversationData에서 foreach로 순회하며 질문과 답변을 화면에 표시 role이 user면 질문, assistant면 답변
-  conversationData.forEach((data) => {
-    if (data.role === "user") {
-      console.log("질문:", data.content);
-      ChatUI.addQuestionToList(data);
-    } else if (data.role === "assistant") {
-      console.log("답변:", data.content);
-      ChatUI.addAnswerToList(data);
-    }
-  });
-  // 예를 들어, 데이터 로딩 시뮬레이션
-  setTimeout(() => {
-    ChatUI.hideLoadingOverlay();
-  }, 2000);
-});
+const editorService = new EditorService(updatePreview);
 
-// 코드 데이터를 JSON 문자열로 변환하고 conversationData에 추가하는 함수
-function addCodeDataToConversation(codeData) {
-  // 코드 데이터를 문자열로 변환
-  const codeDataString = JSON.stringify(codeData);
+ChatUI.setEditorService(editorService);
 
-  if (codeData.description === "" || codeData.description === undefined) {
-    if (!codeData.html) {
-      if (codeData.css) {
-        codeData.description = codeData.css;
-      } else if (codeData.js) {
-        codeData.description = codeData.js;
-      }
-    } else {
-      codeData.description = codeData.html;
-    }
-  }
+const conversationService = new ConversationService("conversationData", prompt);
 
-  // conversationData에 추가
-  conversationData.push({
-    role: "user",
-    content: codeDataString,
-  });
+function updatePreview() {
+  const htmlContent = editorService.getEditorValue("html");
+  const cssContent = `<style>${editorService.getEditorValue("css")}</style>`;
+  const jsContent = `<script>${editorService.getEditorValue("js")}</script>`;
 
-  // conversationData를 localStorage에 저장
-  LocalStorageService.setData("conversationData", conversationData); // 로컬 스토리지에 데이터 저장
-
-  return conversationData;
+  const previewFrame = document.getElementById("preview");
+  const preview =
+    previewFrame.contentDocument || previewFrame.contentWindow.document;
+  preview.open();
+  preview.write(htmlContent + cssContent + jsContent);
+  preview.close();
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  // 에디터 인스턴스 초기화
-  const editors = {
-    html: CodeMirror.fromTextArea(document.getElementById("html-editor"), {
-      lineNumbers: true,
-      mode: "text/html",
-      theme: "darcula",
-    }),
-    css: CodeMirror.fromTextArea(document.getElementById("css-editor"), {
-      lineNumbers: true,
-      mode: "css",
-      theme: "darcula",
-    }),
-    js: CodeMirror.fromTextArea(document.getElementById("js-editor"), {
-      lineNumbers: true,
-      mode: "javascript",
-      theme: "darcula",
-    }),
-  };
+// 이벤트 핸들러 분리
+function handleWindowLoad() {
+  loadStoredData();
+  setTimeout(() => ChatUI.hideLoadingOverlay(), 2000);
+}
 
-  let conversationData = LocalStorageService.getData("conversationData"); // 로컬 스토리지에서 데이터 가져오기
+function handleDOMContentLoaded() {
+  loadEditorData();
+  ChatUI.setupTabSwitching();
+  setupCodeSubmission();
+}
 
-  const assistantData = conversationData
+// 데이터 로딩 관련 로직
+function loadStoredData() {
+  const storedData = conversationService.getData(conversationService.dataKey);
+
+  storedData.forEach((data) => {
+    if (data.role === "user") {
+      console.log("질문:", data.content);
+      ChatUI.addQuestionToList(data, () => removeMessage(data));
+    } else if (data.role === "assistant") {
+      console.log("답변:", data.content);
+      ChatUI.addAnswerToList(data, () => removeMessage(data));
+    }
+  });
+}
+
+function removeMessage(data) {
+  conversationService.removeData(data.id);
+  ChatUI.removeMessageFromList(data.id);
+}
+
+function loadEditorData() {
+  const assistantData = getAssistantData();
+  setEditorValues(assistantData);
+}
+
+function getAssistantData() {
+  return conversationService.data
     .filter((item) => item.role === "assistant")
     .reduce((acc, item) => {
       try {
         const content = JSON.parse(item.content);
-        return {
-          ...acc,
-          ...content,
-        };
+        return { ...acc, ...content };
       } catch (e) {
+        console.error("Error parsing assistant data:", e);
         return acc;
       }
     }, {});
+}
 
-  Object.keys(editors).forEach((lang) => {
+function setEditorValues(assistantData) {
+  Object.keys(editorService.editors).forEach((lang) => {
     let content = assistantData[lang] || "";
-    editors[lang].setValue(content);
+    editorService.setEditorValue(lang, content);
   });
+}
 
-  // 에디터 내용 변경 시 로컬 스토리지에 저장
-  Object.entries(editors).forEach(([lang, editor]) => {
-    editor.on("change", () => {
-      const content = editor.getValue();
-      // // 빈 에디터 검사 및 경고 코드 제거
-      // LocalStorageService.setData(lang, content);
-    });
-  });
-
-  // 탭 버튼에 대한 클릭 이벤트 리스너를 추가합니다.
-  document.querySelectorAll("#editor-tabs button").forEach((button) => {
-    button.addEventListener("click", function () {
-      const lang = this.getAttribute("data-lang"); // HTML에서 data-lang 속성을 사용
-      selectTab(lang, editors);
-    });
-  });
-
-  // selectTab 함수 정의
-  function selectTab(lang, editors) {
-    Object.keys(editors).forEach((key) => {
-      const editorElement = editors[key].getWrapperElement();
-      editorElement.style.display = key === lang ? "block" : "none";
-    });
-
-    // 선택된 에디터 새로고침
-    editors[lang].refresh();
-  }
-
-  // 모든 에디터의 내용을 수집하고 API 요청을 보내는 함수
-  const collectAndSendCode = async () => {
-    ChatUI.showLoadingOverlay(); // 로딩 오버레이 표시
-    let codeData = {
-      html: editors.html.getValue(),
-      css: editors.css.getValue(),
-      js: editors.js.getValue(),
-    };
-
-    console.log(
-      "Sending code data to API:",
-      addCodeDataToConversation(codeData, ...validJSONPrompt),
-      codeData
-    );
-
-    try {
-      const apiResponse = await postToApi(addCodeDataToConversation(codeData)); // API 요청 보내기
-      console.log("API response:", apiResponse);
-      const result = apiResponse.choices[0].message;
-
-      const data = JSON.parse(result.content);
-
-      console.log(result, data);
-      ChatUI.addQuestionToList(addCodeDataToConversation(codeData));
-
-      conversationData.push(result);
-
-      // conversationData를 localStorage에 저장
-      LocalStorageService.setData("conversationData", conversationData); // 로컬 스토리지에 데이터 저장
-
-      ChatUI.addAnswerToList(result);
-
-      // API 응답 처리 (예시)
-      // API 응답에 따라 필요한 UI 업데이트나 알림을 여기에 구현합니다.
-
-      // API 응답을 에디터에 설정
-      Object.keys(editors).forEach((lang) => {
-        let content = data[lang] || "";
-        editors[lang].setValue(content);
-      });
-    } catch (error) {
-      console.error("Error to API:", error);
-    } finally {
-      ChatUI.hideLoadingOverlay(); // 로딩 오버레이 숨기기
-    }
-  };
-
-  // 각 에디터에 컨트롤 + 엔터 단축키 이벤트 리스너 추가
-  Object.values(editors).forEach((editor) => {
+// 코드 제출 설정
+function setupCodeSubmission() {
+  Object.values(editorService.editors).forEach((editor) => {
     editor.setOption("extraKeys", {
-      "Ctrl-Enter": function () {
-        collectAndSendCode(); // 컨트롤 + 엔터를 누르면 실행
-      },
+      "Ctrl-Enter": collectAndSendCode,
     });
   });
+}
 
-  // 초기 에디터 설정: HTML 에디터만 보이게 하기
-  selectTab("html", editors);
+async function collectAndSendCode() {
+  ChatUI.showLoadingOverlay();
+  let codeData = editorService.collectCodeData();
+  codeData = removeIdFromData(codeData);
 
-  function updatePreview() {
-    const htmlContent = editors.html.getValue();
-    const cssContent = `<style>${editors.css.getValue()}</style>`;
-    const jsContent = `<script>${editors.js.getValue()}</script>`;
-
-    const previewFrame = document.getElementById("preview");
-    const preview =
-      previewFrame.contentDocument || previewFrame.contentWindow.document;
-    preview.open();
-    preview.write(htmlContent + cssContent + jsContent); // HTML, CSS, JS 내용을 합쳐서 프리뷰에 적용
-    preview.close();
+  console.log("Sending code data to API:", codeData);
+  try {
+    const apiResponse = await postToApi([
+      ...conversationService.data,
+      createUserData(codeData),
+    ]);
+    console.log("API response:", apiResponse);
+    processApiResponse(apiResponse);
+  } catch (error) {
+    console.error("Error to API:", error);
+  } finally {
+    ChatUI.hideLoadingOverlay();
   }
+}
 
-  // 에디터 내용 변경 이벤트에 프리뷰 업데이트 함수 연결
-  Object.entries(editors).forEach(([_, editor]) => {
-    editor.on("change", updatePreview);
-  });
+function processApiResponse(apiResponse) {
+  const resultContent = ensureProperEncodingAndEscaping(
+    apiResponse.choices[0].message.content
+  );
+  const data = JSON.parse(resultContent);
 
-  // 초기 프리뷰 업데이트
-  updatePreview();
-});
+  conversationService.addData(apiResponse.choices[0].message);
+  displayApiResponse(data, apiResponse.choices[0].message);
+}
+
+function displayApiResponse(data, message) {
+  ChatUI.addQuestionToList(data, () => removeMessage(message));
+  ChatUI.addAnswerToList(message, () => removeMessage(message));
+  setEditorValues(data);
+}
+
+// 이벤트 리스너 등록
+window.addEventListener("load", handleWindowLoad);
+document.addEventListener("DOMContentLoaded", handleDOMContentLoaded);
