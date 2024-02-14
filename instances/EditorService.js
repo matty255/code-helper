@@ -19,6 +19,7 @@ export default class EditorService {
           lineNumbers: true,
           mode: config.mode,
           theme: "darcula",
+          viewportMargin: Infinity, // Set viewportMargin to Infinity to make editor height dynamic
         }
       );
 
@@ -28,6 +29,9 @@ export default class EditorService {
           this.updatePreviewCallback();
         }
       });
+
+      // 에디터의 높이를 100vh로 설정
+      this.editors[lang].getWrapperElement().style.height = "100vh";
     });
   }
 
