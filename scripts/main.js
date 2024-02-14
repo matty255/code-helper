@@ -1,4 +1,9 @@
 // main.js
+// TODO: 삭제 및 수정 기능 작동하게.
+// 모바일 디자인
+// 클릭으로 복사 기능
+// 채팅창 관련 디자인
+
 import { prompt } from "../constants/prompt.js";
 import ConversationService from "../instances/ConversationService.js";
 import EditorService from "../instances/EditorService.js";
@@ -7,6 +12,7 @@ import {
   createUserData,
   ensureProperEncodingAndEscaping,
   removeIdFromData,
+  removeIdFromDataArray,
 } from "../utils/utils.js";
 import { postToApi } from "./apiService.js";
 
@@ -16,7 +22,15 @@ const editorService = new EditorService(updatePreview);
 
 ChatUI.setEditorService(editorService);
 
-const conversationService = new ConversationService("conversationData", prompt);
+const storedData = localStorage.getItem("conversationData")
+  ? JSON.parse(localStorage.getItem("conversationData"))
+  : [];
+
+const conversationService = new ConversationService("conversationData", [
+  ...prompt,
+  ...storedData,
+]);
+console.log(conversationService.data);
 
 function updatePreview() {
   const htmlContent = editorService.getEditorValue("html");
@@ -104,11 +118,13 @@ async function collectAndSendCode() {
   codeData = removeIdFromData(codeData);
 
   console.log("Sending code data to API:", codeData);
+
   try {
     const apiResponse = await postToApi([
-      ...conversationService.data,
+      ...removeIdFromDataArray(conversationService.data),
       createUserData(codeData),
     ]);
+    conversationService.addData(createUserData(codeData));
     console.log("API response:", apiResponse);
     processApiResponse(apiResponse);
   } catch (error) {
@@ -123,6 +139,8 @@ function processApiResponse(apiResponse) {
     apiResponse.choices[0].message.content
   );
   const data = JSON.parse(resultContent);
+
+  console.log(apiResponse.choices[0].message);
 
   conversationService.addData(apiResponse.choices[0].message);
   displayApiResponse(data, apiResponse.choices[0].message);
