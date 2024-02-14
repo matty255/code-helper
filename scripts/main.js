@@ -1,20 +1,46 @@
-import { prompt } from "../constants/prompt.js";
+import { prompt, validJSONPrompt } from "../constants/prompt.js";
+import LocalStorageService from "./LocalStorage.js"; // LocalStorageService import
+import UiGenerator from "./UiGenerator.js";
 import { postToApi } from "./apiService.js";
-import { hideLoadingOverlay, showLoadingOverlay } from "./uiService.js";
 
-let conversationData =
-  JSON.parse(localStorage.getItem("conversationData")) || prompt;
+let conversationData = LocalStorageService.getData("conversationData", prompt); // 로컬 스토리지에서 데이터 가져오기
 
 // uiElements 객체 정의
-const uiElements = {
-  questionList: document.getElementById("question-list"), // 사용자 질문을 표시할 요소
-  answerList: document.getElementById("answer-list"), // 시스템 답변을 표시할 요소
-};
+const ChatUI = new UiGenerator();
+
+window.addEventListener("load", () => {
+  // conversationData에서 foreach로 순회하며 질문과 답변을 화면에 표시 role이 user면 질문, assistant면 답변
+  conversationData.forEach((data) => {
+    if (data.role === "user") {
+      console.log("질문:", data.content);
+      ChatUI.addQuestionToList(data);
+    } else if (data.role === "assistant") {
+      console.log("답변:", data.content);
+      ChatUI.addAnswerToList(data);
+    }
+  });
+  // 예를 들어, 데이터 로딩 시뮬레이션
+  setTimeout(() => {
+    ChatUI.hideLoadingOverlay();
+  }, 2000);
+});
 
 // 코드 데이터를 JSON 문자열로 변환하고 conversationData에 추가하는 함수
 function addCodeDataToConversation(codeData) {
   // 코드 데이터를 문자열로 변환
   const codeDataString = JSON.stringify(codeData);
+
+  if (codeData.description === "" || codeData.description === undefined) {
+    if (!codeData.html) {
+      if (codeData.css) {
+        codeData.description = codeData.css;
+      } else if (codeData.js) {
+        codeData.description = codeData.js;
+      }
+    } else {
+      codeData.description = codeData.html;
+    }
+  }
 
   // conversationData에 추가
   conversationData.push({
@@ -23,7 +49,9 @@ function addCodeDataToConversation(codeData) {
   });
 
   // conversationData를 localStorage에 저장
-  localStorage.setItem("conversationData", JSON.stringify(conversationData));
+  LocalStorageService.setData("conversationData", conversationData); // 로컬 스토리지에 데이터 저장
+
+  return conversationData;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -46,8 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }),
   };
 
-  let conversationData =
-    JSON.parse(localStorage.getItem("conversationData")) || [];
+  let conversationData = LocalStorageService.getData("conversationData"); // 로컬 스토리지에서 데이터 가져오기
 
   const assistantData = conversationData
     .filter((item) => item.role === "assistant")
@@ -63,8 +90,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }, {});
 
-  console.log(assistantData, "s");
-
   Object.keys(editors).forEach((lang) => {
     let content = assistantData[lang] || "";
     editors[lang].setValue(content);
@@ -74,8 +99,8 @@ document.addEventListener("DOMContentLoaded", function () {
   Object.entries(editors).forEach(([lang, editor]) => {
     editor.on("change", () => {
       const content = editor.getValue();
-      // 빈 에디터 검사 및 경고 코드 제거
-      localStorage.setItem(lang, content); // 내용이 변경될 때마다 로컬 스토리지에 저장
+      // // 빈 에디터 검사 및 경고 코드 제거
+      // LocalStorageService.setData(lang, content);
     });
   });
 
@@ -100,7 +125,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 모든 에디터의 내용을 수집하고 API 요청을 보내는 함수
   const collectAndSendCode = async () => {
-    showLoadingOverlay(); // 로딩 오버레이 표시
+    ChatUI.showLoadingOverlay(); // 로딩 오버레이 표시
     let codeData = {
       html: editors.html.getValue(),
       css: editors.css.getValue(),
@@ -109,18 +134,39 @@ document.addEventListener("DOMContentLoaded", function () {
 
     console.log(
       "Sending code data to API:",
-      addCodeDataToConversation(codeData)
+      addCodeDataToConversation(codeData, ...validJSONPrompt),
+      codeData
     );
 
     try {
       const apiResponse = await postToApi(addCodeDataToConversation(codeData)); // API 요청 보내기
       console.log("API response:", apiResponse);
+      const result = apiResponse.choices[0].message;
+
+      const data = JSON.parse(result.content);
+
+      console.log(result, data);
+      ChatUI.addQuestionToList(addCodeDataToConversation(codeData));
+
+      conversationData.push(result);
+
+      // conversationData를 localStorage에 저장
+      LocalStorageService.setData("conversationData", conversationData); // 로컬 스토리지에 데이터 저장
+
+      ChatUI.addAnswerToList(result);
+
       // API 응답 처리 (예시)
       // API 응답에 따라 필요한 UI 업데이트나 알림을 여기에 구현합니다.
+
+      // API 응답을 에디터에 설정
+      Object.keys(editors).forEach((lang) => {
+        let content = data[lang] || "";
+        editors[lang].setValue(content);
+      });
     } catch (error) {
-      console.error("Error sending code data to API:", error);
+      console.error("Error to API:", error);
     } finally {
-      hideLoadingOverlay(); // 로딩 오버레이 숨기기
+      ChatUI.hideLoadingOverlay(); // 로딩 오버레이 숨기기
     }
   };
 
@@ -156,46 +202,4 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 초기 프리뷰 업데이트
   updatePreview();
-
-  // 사용자 입력과 에디터 내용을 결합하여 제출하는 함수
-  async function handleSubmit() {
-    const userInput = document.getElementById("user-input").value; // 사용자 입력 필드에서 값 가져오기
-    const editorContent = [
-      editors.html.getValue(),
-      editors.css.getValue(),
-      editors.js.getValue(),
-    ].join(""); // HTML, CSS, JS 에디터의 내용을 결합
-
-    // 사용자 입력 또는 에디터 내용 중 하나라도 비어 있지 않은 경우 처리
-    const submissionValue =
-      userInput.trim() || editorContent.trim() ? userInput + editorContent : "";
-
-    if (!submissionValue) {
-      console.error("No content to submit.");
-      return; // 제출할 내용이 없으면 함수 종료
-    }
-
-    showLoadingOverlay(); // 로딩 오버레이 표시
-
-    // API 제출 로직 (가정)
-    try {
-      const apiResponse = await postToApi({ content: submissionValue });
-      console.log("API response:", apiResponse);
-      // API 응답에 따른 처리 로직...
-    } catch (error) {
-      console.error("Error sending content to API:", error);
-    } finally {
-      hideLoadingOverlay(); // 로딩 오버레이 숨기기
-    }
-  }
-
-  // '제출' 버튼 클릭 이벤트 리스너
-  document.getElementById("submit-btn").addEventListener("click", handleSubmit);
-
-  // 에디터에 'Ctrl + Enter' 키 이벤트 리스너 추가
-  Object.values(editors).forEach((editor) => {
-    editor.setOption("extraKeys", {
-      "Ctrl-Enter": handleSubmit, // 컨트롤 + 엔터를 누르면 실행
-    });
-  });
 });
