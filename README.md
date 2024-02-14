@@ -8,7 +8,7 @@ Code Helper는 간단한 코드 플레이 그라운드에 GPT-3.5를 직접 통�
 - **디버깅 지원**: 문제를 설명하여 GPT 모델로부터 디버깅 도움을 받습니다.
 - **맞춤형 통합**: 로컬에서 개인화된 프롬프트 학습이 가능합니다.
 
-## 일정
+## 일정(진행중)
 
 ```mermaid
 gantt
@@ -44,6 +44,7 @@ gantt
 
 ## 폴더 구조
 
+- `./assets`: 프로젝트에 들어가는 asset 파일을 보관합니다.
 - `/constants`: 프로젝트 설정을 위한 상수 값을 보관합니다.
 - `/scripts`: API 상호작용 및 UI 동적 기능을 포함하는 JavaScript 파일이 들어 있습니다.
 - `/styles`: 코드 에디터 및 추가 UI 컴포넌트 스타일링을 위한 CSS 파일을 저장합니다.
@@ -86,6 +87,17 @@ flowchart TB
 - `CodeMirror`: 브라우저에서 JavaScript로 구현된 다재다능한 텍스트 에디터입니다. 구문 강조 표시 및 코드 형식 지정을 포함한 풍부한 코드 편집 환경을 제공하는 데 사용됩니다.
 - `DOMPurify`: 원하지 않는 태그와 잠재적으로 위험한 속성으로부터 HTML을 정화하고 청소하는 라이브러리입니다. 문서에 삽입된 내용의 보안을 보장합니다.
 
+## 디자인
+
+### 와이어프레임
+
+<div style="display: flex;">
+
+![와이어프레임](./assets/images/frames/[code-helper]wire-frame.png)
+
+![와이어프레임 - 모바일](./assets/images/frames/[code-helper]wire-frame-moblie.png)
+
+</div>
 ## 시작하기
 
 Code Helper를 시작하려면 이 저장소를 클론하고 `index.html`을 브라우저에서 열어보세요. GPT-3.5 API와 통신하기 위해 인터넷 접속이 필요합니다. git page에서 열 수 있습니다. 제작중.
