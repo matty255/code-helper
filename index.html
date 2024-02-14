@@ -68,8 +68,11 @@
     <div class="loading-overlay hidden fixed">로딩중입니다.</div>
     <main class="flex">
       <section
-        class="chat-container w-full mx-auto my-5 p-5 border border-gray-600 rounded h-screen"
+        id="chat-section"
+        class="chat-container w-1/2 mx-auto my-5 p-5 border border-gray-600 rounded h-screen"
       >
+        <!-- 채팅 섹션 내용 -->
+
         <ul
           class="chat-list list-none p-0 m-0 overflow-auto max-h-75 min-h-[100px]"
         ></ul>
@@ -92,8 +95,8 @@
           다크 모드 전환
         </button>
       </section>
-
-      <section class="h-screen">
+      <div class="splitter"></div>
+      <section id="editor-section" class="h-screen w-1/2">
         <div id="editor-tabs" class="w-[600px]">
           <button data-lang="html">HTML</button>
           <button data-lang="css">CSS</button>
@@ -115,8 +118,10 @@
 
       <iframe
         id="preview"
-        class="w-full h-screen border border-gray-300 mt-5 bg-white"
-      ></iframe>
+        class="w-1/2 h-screen border border-gray-300 mt-5 bg-white"
+      >
+        ></iframe
+      >
     </main>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"
@@ -127,5 +132,6 @@
     <script type="module" src="./tailwind.config.js"></script>
     <script type="module" src="./scripts/main.js"></script>
     <script src="./scripts/themeToggle.js"></script>
+    <script src="./scripts/getAdjustElement.js"></script>
   </body>
 </html>
