@@ -1,3 +1,4 @@
+import { parseQuestionContent } from "../utils/utils.js";
 export default class UiGenerator {
   constructor() {
     this.form = document.querySelector(".chat-form");
@@ -24,6 +25,7 @@ export default class UiGenerator {
     const li = document.createElement("li");
     li.classList.add("chat-item", "chat-question");
     li.dataset.id = question.id;
+    console.log(question.content);
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
@@ -33,13 +35,14 @@ export default class UiGenerator {
     });
     li.appendChild(deleteButton);
 
-    const questionText = document.createElement("span");
-    questionText.innerText = question.content;
-    li.appendChild(questionText);
+    const questionTextSpan = document.createElement("span");
+    (questionTextSpan.innerText = parseQuestionContent(question.content)),
+      li.appendChild(questionTextSpan);
 
     this.chatList.appendChild(li);
   }
 
+  // answer: { id, content }
   addAnswerToList(answer, removeCallback) {
     const li = document.createElement("li");
     li.classList.add("chat-item", "chat-answer");
@@ -61,6 +64,12 @@ export default class UiGenerator {
   }
 
   removeMessageFromList(id) {
+    // id에 "system-prompt"가 포함되어 있다면, 경고 메시지를 표시하고 함수를 종료
+    if (id.includes("system-prompt")) {
+      alert("시스템 프롬프트는 삭제할 수 없습니다.");
+      return;
+    }
+
     const messageElement = this.chatList.querySelector(`[data-id="${id}"]`);
     if (messageElement) {
       this.chatList.removeChild(messageElement);

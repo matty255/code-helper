@@ -39,6 +39,12 @@ export default class LocalStorageService {
   }
 
   removeData(id) {
+    // id에 "system-prompt"가 포함되어 있다면, 경고 메시지를 표시하고 함수를 종료
+    if (id.includes("system-prompt")) {
+      console.warn("시스템 프롬프트는 삭제할 수 없습니다.");
+      return;
+    }
+
     // 특별한 id에 대한 삭제 시도 확인
     if (this.specialIds.has(id)) {
       console.warn(`Cannot remove special data with id: ${id}`);
