@@ -52,13 +52,22 @@ export default class LocalStorageService {
       return;
     }
 
-    if (this.data[id]) {
-      delete this.data[id];
-      try {
-        localStorage.setItem(this.dataKey, JSON.stringify(this.data));
-      } catch (error) {
-        console.error("Error removing data:", error);
-      }
+    // 사용자에게 확인 메시지를 표시
+    const confirmDelete = window.confirm(
+      "연관된 질문/답변이 같이 삭제됩니다. 계속하시겠습니까?"
+    );
+    if (!confirmDelete) {
+      return;
+    }
+
+    // id에 해당하는 메시지를 찾아 제거
+    this.data = this.data.filter((message) => message.id !== id);
+
+    // 로컬 스토리지에 새로운 데이터 배열을 저장
+    try {
+      localStorage.setItem(this.dataKey, JSON.stringify(this.data));
+    } catch (error) {
+      console.error("Error removing data:", error);
     }
   }
 
