@@ -4,7 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Grid Chat App</title>
-    <link rel="icon" href="./assets/images/banners/[code-helper]favicon.png" type="image/x-icon" />
+    <link
+      rel="icon"
+      href="./assets/images/banners/[code-helper]favicon.png"
+      type="image/x-icon"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -58,58 +62,68 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/addon/mode/multiplex.min.js"></script>
     <!-- 추가적인 스크립트 링크 -->
-</body>
-   
+  </head>
+  <body data-theme="dark" class="w-full text-gray-300">
+    <h1 class="a11y">코드 헬퍼</h1>
+    <div class="loading-overlay hidden fixed">로딩중입니다.</div>
+    <main class="flex">
+      <section
+        class="chat-container w-full mx-auto my-5 p-5 border border-gray-600 rounded h-screen"
+      >
+        <ul
+          class="chat-list list-none p-0 m-0 overflow-auto max-h-75 min-h-[100px]"
+        ></ul>
+
+        <form class="chat-form flex name='post'">
+          <!-- <input
+          class="chat-input flex-1 p-2 mr-2 border border-gray-600 rounded"
+          type="text"
+          autofocus
+        /> -->
+          <!-- <input class="hidden" /> -->
+          <button
+            type="submit"
+            class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            전송
+          </button>
+        </form>
+        <button class="theme-toggle mt-4 block p-2 mx-auto cursor-pointer">
+          다크 모드 전환
+        </button>
+      </section>
+
+      <section class="h-screen">
+        <div id="editor-tabs" class="w-[600px]">
+          <button data-lang="html">HTML</button>
+          <button data-lang="css">CSS</button>
+          <button data-lang="js">JS</button>
+        </div>
+        <textarea id="html-editor" class="h-screen"></textarea>
+        <textarea
+          id="css-editor"
+          class="h-screen"
+          style="display: none"
+        ></textarea>
+        <textarea
+          id="js-editor"
+          class="h-screen"
+          style="display: none"
+        ></textarea>
+      </section>
+      <div></div>
+
+      <iframe
+        id="preview"
+        class="w-full h-screen border border-gray-300 mt-5 bg-white"
+      ></iframe>
+    </main>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"
       integrity="sha512-5g2Nj3mqLOgClHi20oat1COW7jWvf7SyqnvwWUsMDwhjHeqeTl0C+uzjucLweruQxHbhDwiPLXlm8HBO0011pA=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-  </head>
-  <body data-theme="dark" class="text-gray-300 px-20">
-    <div
-      class="chat-container w-full mx-auto my-5 p-5 border border-gray-600 rounded"
-    >
-      <ul
-        class="chat-list list-none p-0 m-0 overflow-auto max-h-75 min-h-[100px]"
-      ></ul>
-
-      <form class="chat-form flex name='post'">
-        <!-- <input
-          class="chat-input flex-1 p-2 mr-2 border border-gray-600 rounded"
-          type="text"
-          autofocus
-        /> -->
-        <!-- <input class="hidden" /> -->
-        <button
-          type="submit"
-          class="hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        >
-          전송
-        </button>
-      </form>
-      <button class="theme-toggle mt-4 block p-2 mx-auto cursor-pointer">
-        다크 모드 전환
-      </button>
-    </div>
-
-    <div class="loading-overlay hidden">로딩중입니다.</div>
-    <div id="editor-tabs">
-      <button  data-lang="html">HTML</button>
-      <button data-lang="css">CSS</button>
-      <button data-lang="js">JS</button>
-    </div>
-    <textarea id="html-editor"></textarea>
-    <textarea id="css-editor" style="display:none;"></textarea>
-    <textarea id="js-editor" style="display:none;"></textarea>
-
-
-    <iframe
-      id="preview"
-      class="w-full h-48 border border-gray-300 mt-5 bg-white"
-    ></iframe>
-   
     <script type="module" src="./tailwind.config.js"></script>
     <script type="module" src="./scripts/main.js"></script>
     <script src="./scripts/themeToggle.js"></script>
