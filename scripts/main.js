@@ -9,9 +9,11 @@ import {
 import { submitDataToApi } from "./apiRequests.js";
 
 const ChatUI = new UiGenerator();
+
 const storedData = localStorage.getItem("conversationData")
   ? JSON.parse(localStorage.getItem("conversationData"))
   : [];
+
 const conversationService = new ConversationService("conversationData", [
   ...prompt,
   ...storedData,
@@ -31,6 +33,7 @@ async function sendRequestToApi(data, isEditorRequest = false) {
     return;
   }
 
+  console.log("API 요청 시작:", data);
   isSubmitting = true;
   ChatUI.showLoadingOverlay();
 
@@ -57,35 +60,34 @@ async function sendRequestToApi(data, isEditorRequest = false) {
     console.error("Error sending request to API:", error);
   } finally {
     ChatUI.hideLoadingOverlay();
+    console.log("API 요청 처리 완료");
     isSubmitting = false;
   }
 }
 
 function processApiResponse(apiResponse, isEditorRequest, messageId) {
-  console.log("API 응답:", apiResponse);
+  console.log("API 응답 처리 시작", apiResponse);
   try {
+    // API 응답 내용 로깅
+    console.log("API 응답 내용:", apiResponse.choices[0].message.content);
     const resultContent = ensureProperEncodingAndEscaping(
       apiResponse.choices[0].message.content
     );
     const data = JSON.parse(resultContent);
 
-    if (!isEditorRequest) {
+    console.log("파싱된 응답 데이터:", data); // 파싱된 데이터 로깅
+
+    // 여기에 유효성 검사 로직 추가
+    if (!isEditorRequest && data && Object.keys(data).length > 0) {
+      // 유효한 데이터만 대화 목록에 추가
       conversationService.addData(apiResponse.choices[0].message);
     }
 
-    displayApiResponse(data, messageId);
+    editorService.extractAndSetCode(data);
   } catch (error) {
     console.error("API 응답 처리 중 에러 발생:", error);
-  }
-}
-
-function displayApiResponse(data, messageId) {
-  ChatUI.addAnswerToList(
-    { id: messageId, content: data.html || data.description },
-    () => removeMessage(messageId)
-  );
-  if (data.code) {
-    editorService.extractAndSetCode(data);
+  } finally {
+    console.log("API 응답 처리 완료");
   }
 }
 

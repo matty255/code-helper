@@ -2,8 +2,6 @@ import { isJSON, parseQuestionContent } from "../utils/utils.js";
 
 export default class UiGenerator {
   constructor() {
-    this.form = document.querySelector(".chat-form");
-    this.input = document.querySelector(".chat-input");
     this.chatList = document.querySelector(".chat-list");
     this.loadingOverlay = document.querySelector(".loading-overlay");
     this.editorService = null; // EditorService 인스턴스를 저장할 필드 추가
@@ -29,15 +27,14 @@ export default class UiGenerator {
 
   addQuestionToList(question, removeCallback) {
     const li = document.createElement("li");
-    li.classList.add("chat-item", "chat-question");
+    li.classList.add("chat-item", "chat-question"); // 기존 클래스 유지
     li.dataset.id = question.id;
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "삭제";
-    deleteButton.style.fontSize = "12px";
-    deleteButton.style.float = "right"; // Add this line
-    deleteButton.style.backgroundColor = "#333"; // Add this line
-    deleteButton.style.padding = "2px"; // Add this line
+    // Tailwind CSS 클래스 추가
+    deleteButton.className =
+      "text-xs float-right bg-gray-800 text-white py-1 px-2";
 
     deleteButton.addEventListener("click", () => {
       removeCallback(question.id);
@@ -52,18 +49,16 @@ export default class UiGenerator {
     this.scrollChatToBottom();
   }
 
-  // answer: { id, content }
   addAnswerToList(answer, removeCallback) {
     const li = document.createElement("li");
-    li.classList.add("chat-item", "chat-answer");
+    li.classList.add("chat-item", "chat-answer"); // 기존 클래스 유지
     li.dataset.id = answer.id;
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "삭제";
-    deleteButton.style.fontSize = "12px";
-    deleteButton.style.float = "left"; // Add this line
-    deleteButton.style.backgroundColor = "#333"; // Add this line
-    deleteButton.style.padding = "2px"; // Add this line
+    // Tailwind CSS 클래스 추가
+    deleteButton.className =
+      "text-xs float-left bg-gray-800 text-white py-1 px-2";
 
     deleteButton.addEventListener("click", () => {
       removeCallback(answer.id);
@@ -75,7 +70,7 @@ export default class UiGenerator {
       answerText.innerText = JSON.parse(answer.content).description;
       li.appendChild(answerText);
 
-      // Add click event to show modal
+      // 클릭 이벤트 추가
       li.addEventListener("click", () => {
         const modalContent = JSON.parse(answer.content).html;
         this.showModal(modalContent);
