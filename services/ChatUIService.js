@@ -7,6 +7,11 @@ export default class UiGenerator {
     this.chatList = document.querySelector(".chat-list");
     this.loadingOverlay = document.querySelector(".loading-overlay");
     this.editorService = null; // EditorService 인스턴스를 저장할 필드 추가
+    this.chatContainer = document.querySelector(".chat-container");
+  }
+
+  scrollChatToBottom() {
+    this.chatContainer.scrollTop = this.chatContainer.scrollHeight;
   }
 
   // EditorService 인스턴스를 설정하는 메서드
@@ -44,6 +49,7 @@ export default class UiGenerator {
     li.appendChild(questionTextSpan);
 
     this.chatList.appendChild(li);
+    this.scrollChatToBottom();
   }
 
   // answer: { id, content }
@@ -77,6 +83,7 @@ export default class UiGenerator {
     }
 
     this.chatList.appendChild(li);
+    this.scrollChatToBottom();
   }
 
   showModal(content) {

@@ -2,25 +2,21 @@ export const prompt = [
   {
     id: "system-prompt-1",
     role: "system",
-    content: `For every request, responses should be strictly in JSON format focusing solely on HTML content. The JSON object must always include 'html' and 'description' keys, excluding 'css' and 'js' keys to ensure simplicity and reliance on HTML alone. The 'description' key should provide a clear explanation of the HTML content. To facilitate continuous data fetching with promise chaining, include a placeholder at the end of HTML content for potential follow-up requests. This placeholder is "<p>다음 요청에서 계속됩니다.</p>" for indicating ongoing content delivery. Pay special attention to JSON string formatting:
+    content: `For each request, it is imperative that responses not only adhere to JSON format but also robustly include 'html', 'css', and 'js' keys. This ensures a comprehensive delivery of content, enabling a rich, interactive experience. The JSON object must encapsulate the essence of the website, including styling (CSS) and functionality (JavaScript), alongside the 'html' content. 'description' key must articulate a succinct overview of the encompassed content. Moreover, to support extensive data fetching and seamless continuation across requests, embed a strategic placeholder "<p>다음 요청에서 계속됩니다.</p>" within the HTML. This signals ongoing engagement and prompts for subsequent data retrieval:
 
-    - Escape Special Characters: Ensure characters like double quotes (\\"), backslashes (\\\\), and control characters (\\n, \\t) are escaped.
+    - Meticulously escape special characters (e.g., \\\", \\\\, \\n, \\t) to ensure JSON integrity and parseability.
     
-    - Use \\n for newlines and \\t for tabs to maintain the readability of the HTML structure within the JSON string.
+    - Leverage \\n and \\t for formatting, maintaining clarity and structure within the JSON string.
     
-    - Ensure compatibility with JSON.parse() by correctly escaping all special characters.
-    
-    Properly escaping characters is crucial to avoid parsing errors and ensure the JSON can be correctly interpreted. Here's an emphasis on HTML content delivery without CSS and JavaScript, and how to prepare for promise chaining by incorporating a specific placeholder.`,
+    - Guarantee JSON.parse() compatibility, meticulously escaping all special characters to prevent parsing errors.
+
+    The inclusion of CSS and JavaScript is non-negotiable, essential for delivering a fully-functional, styled web experience. Ensure the JSON response is meticulously crafted to facilitate not just promise chaining for data fetching but also a coherent, continuous user journey across requests.`,
   },
   {
     id: "system-prompt-2",
     role: "user",
-    content: "Create a simple website featuring a cat.",
-  },
-  {
-    id: "system-prompt-2",
-    role: "user",
-    content: "멋진 웹사이트를 만들어주세요. 고양이가 있는 간단한 사이트.",
+    content:
+      "Create a sophisticated website featuring a cat, including interactive elements.",
   },
   {
     id: "system-prompt-3",
@@ -30,4 +26,4 @@ export const prompt = [
 ];
 
 export const validJSONPrompt =
-  "Ensure your JSON responses are properly formatted, focusing on HTML content. Remember to escape special characters and include a clear description of the HTML content. For handling large datasets, use promise chaining with a placeholder indicating continuation for subsequent requests. This approach standardizes the delivery of HTML content in a manageable and efficient manner.";
+  "It's crucial to ensure your JSON responses are comprehensive, incorporating HTML, CSS, and JavaScript to provide a full-fledged web experience. Remember to escape special characters accurately and include a detailed description of the entire content. Utilize promise chaining to manage large datasets efficiently, embedding a placeholder to signify the continuation of data retrieval in subsequent requests. This approach is fundamental for delivering rich, interactive web content methodically and seamlessly across multiple requests.";
