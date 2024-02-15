@@ -1,35 +1,41 @@
-// 스플릿터와 아이프레임 요소
-const splitter = document.querySelector(".splitter");
-const iframeContainer = document.getElementById("iframe-container");
+$(function () {
+  var containerWidth = $("#main-container").width();
+  var minSectionWidth = 100; // 최소 섹션 너비 설정
 
-// 이전 마우스 위치 저장 변수
-let prevMouseX = 0;
+  $("#splitter1").draggable({
+    axis: "x",
+    containment: [minSectionWidth, 0, containerWidth - minSectionWidth * 2, 0], // 드래그 가능 범위 제한
+    drag: function (event, ui) {
+      var splitterPosition = ui.position.left;
+      var nextSplitterPosition = $("#splitter2").offset().left;
+      var maxWidth = nextSplitterPosition - minSectionWidth;
 
-// 스플릿터를 드래그하는 이벤트 핸들러
-function handleDrag(e) {
-  // 마우스 이동량 계산
-  const deltaX = e.clientX - prevMouseX;
+      if (splitterPosition > minSectionWidth && splitterPosition < maxWidth) {
+        $("#chat-section").width(splitterPosition);
+        $("#editor-section")
+          .css("left", splitterPosition)
+          .width(nextSplitterPosition - splitterPosition);
+      }
+    },
+  });
 
-  // 이동량에 따라 섹션의 너비를 조정
-  const chatSection = document.getElementById("chat-section");
-  const editorSection = document.getElementById("editor-section");
-  chatSection.style.width = `${chatSection.offsetWidth + deltaX}px`;
-  editorSection.style.width = `${editorSection.offsetWidth - deltaX}px`;
+  $("#splitter2").draggable({
+    axis: "x",
+    containment: [minSectionWidth * 2, 0, containerWidth - minSectionWidth, 0], // 드래그 가능 범위 제한
+    drag: function (event, ui) {
+      var splitterPosition = ui.position.left;
+      var prevSplitterPosition = $("#splitter1").offset().left;
+      var maxWidth = containerWidth - minSectionWidth;
 
-  // 아이프레임의 너비를 조정
-  iframeContainer.style.width = `${iframeContainer.offsetWidth - deltaX}px`;
-
-  // 마우스 위치 업데이트
-  prevMouseX = e.clientX;
-}
-
-// 마우스 이벤트 리스너 추가
-splitter.addEventListener("mousedown", (e) => {
-  prevMouseX = e.clientX;
-  document.addEventListener("mousemove", handleDrag);
-});
-
-// 마우스 이벤트 리스너 제거
-document.addEventListener("mouseup", () => {
-  document.removeEventListener("mousemove", handleDrag);
+      if (
+        splitterPosition > prevSplitterPosition + minSectionWidth &&
+        splitterPosition < maxWidth
+      ) {
+        $("#editor-section").width(splitterPosition - prevSplitterPosition);
+        $("#iframe-section")
+          .css("left", splitterPosition)
+          .width(maxWidth - splitterPosition);
+      }
+    },
+  });
 });
