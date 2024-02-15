@@ -65,11 +65,17 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/css/css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/addon/mode/multiplex.min.js"></script>
+    <script type="module" src="./tailwind.config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
     <!-- 추가적인 스크립트 링크 -->
   </head>
   <body data-theme="dark" class="w-full text-gray-300">
+    <div id="global-loading" class="flex flex-col">
+      <div id="lottie"></div>
+      <p>loading...</p>
+    </div>
     <h1 class="a11y">코드 헬퍼</h1>
-    <div class="loading-overlay hidden fixed">로딩중입니다.</div>
+    <div class="loading-overlay fixed">로딩중입니다.</div>
     <main class="flex">
       <section
         id="chat-section"
@@ -144,9 +150,10 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     ></script>
-    <script type="module" src="./tailwind.config.js"></script>
+
     <script type="module" src="./scripts/main.js"></script>
     <script src="./scripts/themeToggle.js"></script>
     <script src="./scripts/getAdjustElement.js"></script>
+    <script src="./scripts/loading.js"></script>
   </body>
 </html>
