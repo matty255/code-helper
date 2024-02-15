@@ -71,18 +71,19 @@
   </head>
   <body data-theme="dark" class="w-full text-gray-300">
     <div id="global-loading" class="flex flex-col">
-      <div id="lottie"></div>
+      <img
+        src="./assets/images/banners/[code-helper]logo.png"
+        alt="로딩중입니다."
+      />
       <p>loading...</p>
     </div>
     <h1 class="a11y">코드 헬퍼</h1>
     <div class="loading-overlay fixed">로딩중입니다.</div>
-    <main class="flex">
+    <main class="md:flex">
       <section
         id="chat-section"
-        class="chat-container w-1/2 mx-auto my-5 p-5 border border-gray-600 rounded h-screen flex flex-col justify-between"
+        class="chat-container w-full mx-auto md:my-5 p-5 border border-gray-600 rounded h-screen flex flex-col justify-between transition-all duration-500 md:w-1/2"
       >
-        <!-- 채팅 섹션 내용 -->
-
         <ul
           class="chat-list list-none p-0 m-0 overflow-auto max-h-full flex-1"
         ></ul>
@@ -105,14 +106,14 @@
               전송
             </button>
           </form>
-          <button class="theme-toggle mt-4 block p-2 mx-auto cursor-pointer">
-            다크 모드 전환
-          </button>
         </div>
       </section>
 
       <div class="splitter"></div>
-      <section id="editor-section" class="h-screen w-1/2">
+      <section
+        id="editor-section"
+        class="h-screen w-full md:w-1/2 fixed top-0 left-0 md:static"
+      >
         <div id="editor-tabs" class="w-[600px]">
           <button data-lang="html">HTML</button>
           <button data-lang="css">CSS</button>
@@ -139,11 +140,34 @@
 
       <iframe
         id="preview"
-        class="hidden lg:block w-1/2 h-screen border border-gray-300 mt-5 bg-white"
+        class="fixed top-0 left-0 w-full xl:static xl:w-1/2 h-screen border border-gray-300 mt-5 bg-white z-10 transition-all duration-500 translate-x-full xl:translate-x-0"
       >
         ></iframe
       >
     </main>
+    <footer
+      class="fixed bottom-10 w-full text-right fixed bottom-0 right-10 z-10 h-8"
+    >
+      <button
+        class="theme-toggle mx-auto cursor-pointer rounded-full bg-red-400 py-2 px-4 hover:bg-red-500 transition-all duration-500"
+      >
+        <p class="text-white">다크 모드 토글</p>
+      </button>
+
+      <button
+        id="toggle-chat"
+        class="xl:hidden toggle-chat-btn cursor-pointer rounded-full bg-blue-400 p-2 hover:bg-blue-500 transition-all duration-500"
+      >
+        <p class="text-white">채팅 토글</p>
+      </button>
+      <button
+        id="toggle-preview"
+        class="xl:hidden cursor-pointer rounded-full bg-amber-400 p-2 hover:bg-amber-500 transition-all duration-500"
+      >
+        <p class="text-white">미리보기 토글</p>
+      </button>
+    </footer>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"
       integrity="sha512-5g2Nj3mqLOgClHi20oat1COW7jWvf7SyqnvwWUsMDwhjHeqeTl0C+uzjucLweruQxHbhDwiPLXlm8HBO0011pA=="
@@ -155,5 +179,6 @@
     <script src="./scripts/themeToggle.js"></script>
     <script src="./scripts/getAdjustElement.js"></script>
     <script src="./scripts/loading.js"></script>
+    <script src="./scripts/getAdjustMobileChat.js"></script>
   </body>
 </html>

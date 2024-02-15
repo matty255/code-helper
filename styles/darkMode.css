@@ -164,5 +164,5 @@ body[data-theme="dark"] .close:focus {
   justify-content: center;
   align-items: center;
   font-size: 20px;
-  z-index: 1000; /* 다른 요소들 위에 표시 */
+  z-index: 1000;
 }
