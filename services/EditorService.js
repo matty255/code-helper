@@ -63,7 +63,7 @@ export default class EditorService {
 
       // CodeMirror 테마 변경
       Object.values(this.editors).forEach((editor) => {
-        editor.setOption("theme", isDark ? "juejin" : "material-darker");
+        editor.setOption("theme", isDark ? "juejin" : "darcula");
       });
     });
   }

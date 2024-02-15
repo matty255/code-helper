@@ -54,7 +54,7 @@ export default class LocalStorageService {
 
     // 사용자에게 확인 메시지를 표시
     const confirmDelete = window.confirm(
-      "연관된 질문/답변이 같이 삭제됩니다. 계속하시겠습니까?"
+      "삭제된 컨텐츠는 복구할 수 없습니다. 계속하시겠습니까?"
     );
     if (!confirmDelete) {
       return;

@@ -8,21 +8,21 @@
 
 @font-face {
   font-family: "NanumSquare";
-  src: url("../fonts/NanumSquareNeo-Variable.ttf") format("truetype");
+  src: url("../assets/fonts/NanumSquareNeo-Variable.ttf") format("truetype");
   font-weight: 100 1000;
   font-stretch: 50% 200%;
 }
 
 @font-face {
   font-family: "HappinessSans";
-  src: url("../fonts/HappinessSansVF.ttf") format("truetype");
+  src: url("../assets/fonts/HappinessSansVF.ttf") format("truetype");
   font-weight: 100 1000;
   font-stretch: 50% 200%;
 }
 
 @font-face {
   font-family: "ClimateCrisis";
-  src: url("../fonts/ClimateCrisisKRVF.ttf") format("truetype");
+  src: url("../assets/fonts/ClimateCrisisKRVF.ttf") format("truetype");
   font-weight: 100 1000;
   font-stretch: 50% 200%;
 }

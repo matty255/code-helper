@@ -40,7 +40,6 @@ body[data-theme="dark"] .chat-container {
 body[data-theme="dark"] .chat-item {
   background-color: #424242; /* 어두운 모드에 대한 조정 */
   color: #ccc; /* 밝은 글씨 */
-  cursor: pointer;
 }
 
 body[data-theme="dark"] .chat-question {
@@ -51,6 +50,10 @@ body[data-theme="dark"] .chat-question {
 body[data-theme="dark"] .chat-answer {
   background-color: #345a5e;
   color: #ffffff; /* 답변에 대한 밝은 글씨 색상 */
+  cursor: pointer;
+  &:hover {
+    background-color: #2d4d50;
+  }
 }
 
 body[data-theme="dark"] .chat-input,
@@ -93,4 +96,59 @@ body[data-theme="light"] .splitter {
 
 #editor-section {
   overflow: auto;
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 20; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Dark mode */
+body[data-theme="dark"] .modal-content {
+  background-color: #333;
+  color: #ccc;
+}
+
+body[data-theme="dark"] .close {
+  color: #ccc;
+}
+
+body[data-theme="dark"] .close:hover,
+body[data-theme="dark"] .close:focus {
+  color: #fff;
+}
+
+#code-block {
+  padding-top: 20px;
 }

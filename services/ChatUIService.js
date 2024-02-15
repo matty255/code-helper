@@ -26,19 +26,22 @@ export default class UiGenerator {
     const li = document.createElement("li");
     li.classList.add("chat-item", "chat-question");
     li.dataset.id = question.id;
-    // console.log(question.content);
 
     const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Delete";
-    deleteButton.style.width = "100px"; // 스타일 추가
+    deleteButton.innerText = "삭제";
+    deleteButton.style.fontSize = "12px";
+    deleteButton.style.float = "right"; // Add this line
+    deleteButton.style.backgroundColor = "#333"; // Add this line
+    deleteButton.style.padding = "2px"; // Add this line
+
     deleteButton.addEventListener("click", () => {
       removeCallback(question.id);
     });
     li.appendChild(deleteButton);
 
     const questionTextSpan = document.createElement("span");
-    (questionTextSpan.innerText = parseQuestionContent(question.content)),
-      li.appendChild(questionTextSpan);
+    questionTextSpan.innerText = parseQuestionContent(question.content);
+    li.appendChild(questionTextSpan);
 
     this.chatList.appendChild(li);
   }
@@ -49,24 +52,75 @@ export default class UiGenerator {
     li.classList.add("chat-item", "chat-answer");
     li.dataset.id = answer.id;
 
-    // console.log(answer);
-
     const deleteButton = document.createElement("button");
-    deleteButton.innerText = "Delete";
-    deleteButton.style.width = "100px"; // 스타일 추가
+    deleteButton.innerText = "삭제";
+    deleteButton.style.fontSize = "12px";
+    deleteButton.style.float = "left"; // Add this line
+    deleteButton.style.backgroundColor = "#333"; // Add this line
+    deleteButton.style.padding = "2px"; // Add this line
+
     deleteButton.addEventListener("click", () => {
       removeCallback(answer.id);
     });
     li.appendChild(deleteButton);
 
     if (isJSON(answer.content)) {
-      // console.log(answer.content);
       const answerText = document.createElement("span");
       answerText.innerText = JSON.parse(answer.content).description;
       li.appendChild(answerText);
+
+      // Add click event to show modal
+      li.addEventListener("click", () => {
+        const modalContent = JSON.parse(answer.content).html;
+        this.showModal(modalContent);
+      });
     }
 
     this.chatList.appendChild(li);
+  }
+
+  showModal(content) {
+    const modal = document.querySelector(".modal");
+
+    // Set the modal content
+    modal.innerHTML = `
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="rendered-content" id="rendered-content">${content}</div>
+        <div id="code-block"></div>
+      </div>
+    `;
+
+    modal.style.display = "block";
+
+    // Create a CodeMirror instance for the code block
+    const codeBlock = CodeMirror(document.getElementById("code-block"), {
+      value: content,
+      mode: "htmlmixed",
+      theme: "darcula",
+      readOnly: true,
+    });
+
+    // Refresh the editor and set the cursor to the start
+    setTimeout(() => {
+      codeBlock.refresh();
+      codeBlock.setCursor({ line: 0, ch: 0 });
+    }, 1);
+
+    // Then find the .close element
+    const span = document.querySelector(".close");
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function () {
+      modal.style.display = "none";
+    };
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    };
   }
 
   removeMessageFromList(id) {
