@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     renderer: "svg", // 'svg', 'canvas', 'html' 중 하나를 사용하여 렌더링 방식 지정
     loop: true, // 애니메이션 반복 여부
     autoplay: true, // 자동 재생 여부
-    path: "../assets/images/lotties/loading-animation-robot.json", // 애니메이션 데이터의 경로
+    path: "assets/images/lotties/loading-animation-robot.json", // 애니메이션 데이터의 경로
   });
   // 모든 요소가 로드된 후 로딩 창을 숨김
   window.onload = function () {
