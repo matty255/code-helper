@@ -73,37 +73,38 @@
     <main class="flex">
       <section
         id="chat-section"
-        class="chat-container w-1/2 mx-auto my-5 p-5 border border-gray-600 rounded h-screen"
+        class="chat-container w-1/2 mx-auto my-5 p-5 border border-gray-600 rounded h-screen flex flex-col justify-between"
       >
         <!-- 채팅 섹션 내용 -->
 
         <ul
-          class="chat-list list-none p-0 m-0 overflow-auto max-h-75 min-h-[100px]"
+          class="chat-list list-none p-0 m-0 overflow-auto max-h-full flex-1"
         ></ul>
 
-        <form id="codeSubmissionForm" class="chat-form flex">
-          <input
-            id="description"
-            name="description"
-            class="chat-input flex-1 p-2 mr-2 border border-gray-600 rounded"
-            type="text"
-            <!--
-            autofocus
-            --
-          />
+        <div class="form-container">
+          <form id="codeSubmissionForm" class="chat-form flex items-end">
+            <input
+              id="description"
+              name="description"
+              class="chat-input flex-1 p-2 mr-2 border border-gray-600 rounded"
+              type="text"
+              autofocus
+            />
 
-          <button
-            id="submitCode"
-            type="submit"
-            class="hover:bg-blue-400 bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            전송
+            <button
+              id="submitCode"
+              type="submit"
+              class="hover:bg-blue-400 bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              전송
+            </button>
+          </form>
+          <button class="theme-toggle mt-4 block p-2 mx-auto cursor-pointer">
+            다크 모드 전환
           </button>
-        </form>
-        <button class="theme-toggle mt-4 block p-2 mx-auto cursor-pointer">
-          다크 모드 전환
-        </button>
+        </div>
       </section>
+
       <div class="splitter"></div>
       <section id="editor-section" class="h-screen w-1/2">
         <div id="editor-tabs" class="w-[600px]">
