@@ -81,14 +81,19 @@
           class="chat-list list-none p-0 m-0 overflow-auto max-h-75 min-h-[100px]"
         ></ul>
 
-        <form class="chat-form flex">
+        <form id="codeSubmissionForm" class="chat-form flex">
           <input
+            id="description"
+            name="description"
             class="chat-input flex-1 p-2 mr-2 border border-gray-600 rounded"
             type="text"
+            <!--
             autofocus
+            --
           />
 
           <button
+            id="submitCode"
             type="submit"
             class="hover:bg-blue-400 bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >

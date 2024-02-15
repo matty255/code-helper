@@ -39,36 +39,9 @@ export default class LocalStorageService {
   }
 
   removeData(id) {
-    // id에 "system-prompt"가 포함되어 있다면, 경고 메시지를 표시하고 함수를 종료
-    if (id.includes("system-prompt")) {
-      console.warn("시스템 프롬프트는 삭제할 수 없습니다.");
-      return;
-    }
-
-    // 특별한 id에 대한 삭제 시도 확인
-    if (this.specialIds.has(id)) {
-      console.warn(`Cannot remove special data with id: ${id}`);
-      // 삭제할 수 없음을 알리는 메시지나, 예외 처리 등을 이곳에 추가
-      return;
-    }
-
-    // 사용자에게 확인 메시지를 표시
-    const confirmDelete = window.confirm(
-      "삭제된 컨텐츠는 복구할 수 없습니다. 계속하시겠습니까?"
-    );
-    if (!confirmDelete) {
-      return;
-    }
-
-    // id에 해당하는 메시지를 찾아 제거
-    this.data = this.data.filter((message) => message.id !== id);
-
-    // 로컬 스토리지에 새로운 데이터 배열을 저장
-    try {
-      localStorage.setItem(this.dataKey, JSON.stringify(this.data));
-    } catch (error) {
-      console.error("Error removing data:", error);
-    }
+    // 삭제 확인 메시지를 제거하고 바로 삭제를 진행합니다.
+    this.data = this.data.filter((message) => message.id !== id); // UI에서 메시지 제거
+    localStorage.setItem(this.dataKey, JSON.stringify(this.data));
   }
 
   updateData(id, newData) {
