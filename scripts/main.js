@@ -1,5 +1,4 @@
 // main.js
-
 import { prompt } from "../constants/prompt.js";
 import UiGenerator from "../services/ChatUIService.js";
 import ConversationService from "../services/ConversationService.js";
@@ -10,7 +9,7 @@ import {
   removeIdFromData,
   removeIdFromDataArray,
 } from "../utils/utils.js";
-import { postToApi } from "./apiService.js";
+import { submitDataToApi } from "./apiRequests.js";
 
 const ChatUI = new UiGenerator();
 
@@ -45,6 +44,7 @@ function updatePreview() {
 function handleWindowLoad() {
   editorService.loadEditorData();
   loadStoredData();
+  editorService.initThemeToggle();
   setTimeout(() => ChatUI.hideLoadingOverlay(), 2000);
 }
 
@@ -88,12 +88,12 @@ async function collectAndSendCode() {
   console.log("Sending code data to API:", codeData);
 
   try {
-    const apiResponse = await postToApi([
+    const apiResponse = await submitDataToApi([
       ...removeIdFromDataArray(conversationService.data),
       createUserData(codeData),
     ]);
     conversationService.addData(createUserData(codeData));
-    console.log("API response:", apiResponse);
+    // console.log("API response:", apiResponse);
     processApiResponse(apiResponse);
   } catch (error) {
     console.error("Error to API:", error);

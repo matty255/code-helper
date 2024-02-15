@@ -12,7 +12,7 @@ export default class ConversationService extends LocalStorageService {
     message.id = newDataKey;
     this.data.push(message);
 
-    console.log("Added data:", this.data);
+    // console.log("Added data:", this.data);
 
     // this.data를 문자열로 변환하여 localStorage에 저장
     localStorage.setItem("conversationData", JSON.stringify(this.data));

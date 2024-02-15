@@ -50,10 +50,105 @@ body[data-theme="dark"] .chat-question {
 body[data-theme="dark"] .chat-answer {
   background-color: #345a5e;
   color: #ffffff; /* 답변에 대한 밝은 글씨 색상 */
+  cursor: pointer;
+  &:hover {
+    background-color: #2d4d50;
+  }
 }
 
 body[data-theme="dark"] .chat-input,
 body[data-theme="dark"] button {
   border-color: #888;
   color: #ccc; /* 다크 모드에서 입력필드 및 버튼 글씨 색상 조정 */
+}
+
+.splitter {
+  width: 10px;
+  cursor: ew-resize;
+  background-color: rosybrown; /* default to light mode */
+  position: relative;
+  z-index: 10;
+}
+
+body[data-theme="dark"] .splitter {
+  background-color: #333; /* dark mode */
+}
+
+body[data-theme="light"] .splitter {
+  background-color: rosybrown; /* light mode */
+}
+
+/* the rest of your CSS... */
+
+#iframe-container {
+  position: relative;
+}
+
+#iframe-container .splitter {
+  left: -5px;
+  top: 0;
+  bottom: 0;
+}
+
+#chat-section {
+  overflow: auto;
+}
+
+#editor-section {
+  overflow: auto;
+}
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 20; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Dark mode */
+body[data-theme="dark"] .modal-content {
+  background-color: #333;
+  color: #ccc;
+}
+
+body[data-theme="dark"] .close {
+  color: #ccc;
+}
+
+body[data-theme="dark"] .close:hover,
+body[data-theme="dark"] .close:focus {
+  color: #fff;
+}
+
+#code-block {
+  padding-top: 20px;
 }

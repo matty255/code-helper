@@ -26,6 +26,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/darcula.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/juejin.min.css"
+    />
     <!-- 힌트 기능을 위한 스타일시트 -->
     <link
       rel="stylesheet"
@@ -113,8 +117,13 @@
           class="h-screen"
           style="display: none"
         ></textarea>
+        <div class="modal" style="display: none">
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Some text in the Modal..</p>
+          </div>
+        </div>
       </section>
-      <div></div>
 
       <iframe
         id="preview"
