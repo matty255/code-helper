@@ -1,13 +1,9 @@
 // main.js
-// TODO: 삭제 및 수정 기능 작동하게.
-// 모바일 디자인
-// 클릭으로 복사 기능
-// 채팅창 관련 디자인
 
 import { prompt } from "../constants/prompt.js";
-import ConversationService from "../instances/ConversationService.js";
-import EditorService from "../instances/EditorService.js";
-import UiGenerator from "../instances/UiGenerator.js";
+import UiGenerator from "../services/ChatUIService.js";
+import ConversationService from "../services/ConversationService.js";
+import SetEditorValueService from "../services/SetEditorValueService.js";
 import {
   createUserData,
   ensureProperEncodingAndEscaping,
@@ -18,10 +14,6 @@ import { postToApi } from "./apiService.js";
 
 const ChatUI = new UiGenerator();
 
-const editorService = new EditorService(updatePreview);
-
-ChatUI.setEditorService(editorService);
-
 const storedData = localStorage.getItem("conversationData")
   ? JSON.parse(localStorage.getItem("conversationData"))
   : [];
@@ -30,7 +22,12 @@ const conversationService = new ConversationService("conversationData", [
   ...prompt,
   ...storedData,
 ]);
-console.log(conversationService.data);
+
+const editorService = new SetEditorValueService(
+  updatePreview,
+  conversationService
+);
+ChatUI.setEditorService(editorService);
 
 function updatePreview() {
   const htmlContent = editorService.getEditorValue("html");
@@ -45,28 +42,26 @@ function updatePreview() {
   preview.close();
 }
 
-// 이벤트 핸들러 분리
 function handleWindowLoad() {
+  editorService.loadEditorData();
   loadStoredData();
   setTimeout(() => ChatUI.hideLoadingOverlay(), 2000);
 }
 
 function handleDOMContentLoaded() {
-  loadEditorData();
   ChatUI.setupTabSwitching();
   setupCodeSubmission();
 }
 
-// 데이터 로딩 관련 로직
 function loadStoredData() {
   const storedData = conversationService.getData(conversationService.dataKey);
 
   storedData.forEach((data) => {
     if (data.role === "user") {
-      console.log("질문:", data.content);
+      // console.log("Question:", data.content);
       ChatUI.addQuestionToList(data, () => removeMessage(data));
     } else if (data.role === "assistant") {
-      console.log("답변:", data.content);
+      // console.log("Answer:", data.content);
       ChatUI.addAnswerToList(data, () => removeMessage(data));
     }
   });
@@ -77,33 +72,6 @@ function removeMessage(data) {
   ChatUI.removeMessageFromList(data.id);
 }
 
-function loadEditorData() {
-  const assistantData = getAssistantData();
-  setEditorValues(assistantData);
-}
-
-function getAssistantData() {
-  return conversationService.data
-    .filter((item) => item.role === "assistant")
-    .reduce((acc, item) => {
-      try {
-        const content = JSON.parse(item.content);
-        return { ...acc, ...content };
-      } catch (e) {
-        console.error("Error parsing assistant data:", e);
-        return acc;
-      }
-    }, {});
-}
-
-function setEditorValues(assistantData) {
-  Object.keys(editorService.editors).forEach((lang) => {
-    let content = assistantData[lang] || "";
-    editorService.setEditorValue(lang, content);
-  });
-}
-
-// 코드 제출 설정
 function setupCodeSubmission() {
   Object.values(editorService.editors).forEach((editor) => {
     editor.setOption("extraKeys", {
@@ -140,7 +108,7 @@ function processApiResponse(apiResponse) {
   );
   const data = JSON.parse(resultContent);
 
-  console.log(apiResponse.choices[0].message);
+  // console.log(apiResponse.choices[0].message);
 
   conversationService.addData(apiResponse.choices[0].message);
   displayApiResponse(data, apiResponse.choices[0].message);
@@ -149,9 +117,9 @@ function processApiResponse(apiResponse) {
 function displayApiResponse(data, message) {
   ChatUI.addQuestionToList(data, () => removeMessage(message));
   ChatUI.addAnswerToList(message, () => removeMessage(message));
-  setEditorValues(data);
+  editorService.extractAndSetCode(data); // Use the class method for processing and displaying API response
 }
 
-// 이벤트 리스너 등록
+// Event listeners
 window.addEventListener("load", handleWindowLoad);
 document.addEventListener("DOMContentLoaded", handleDOMContentLoaded);

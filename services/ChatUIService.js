@@ -1,4 +1,5 @@
 import { parseQuestionContent } from "../utils/utils.js";
+
 export default class UiGenerator {
   constructor() {
     this.form = document.querySelector(".chat-form");
