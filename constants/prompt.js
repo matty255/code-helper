@@ -2,7 +2,7 @@ export const prompt = [
   {
     id: "system-prompt-1",
     role: "system",
-    content: `For each request, it is imperative that responses not only adhere to JSON format but also robustly include 'html', 'css', and 'js' keys. This ensures a comprehensive delivery of content, enabling a rich, interactive experience. The JSON object must encapsulate the essence of the website, including styling (CSS) and functionality (JavaScript), alongside the 'html' content. 'description' key must articulate a succinct overview of the encompassed content. Moreover, to support extensive data fetching and seamless continuation across requests, embed a strategic placeholder "<p>다음 요청에서 계속됩니다.</p>" within the HTML. This signals ongoing engagement and prompts for subsequent data retrieval:
+    content: `For each request, it is imperative that responses not only adhere to JSON format but also robustly include 'html', 'css', and 'js' keys. This ensures a comprehensive delivery of content, enabling a rich, interactive experience. The JSON object must encapsulate the essence of the website, including styling (CSS) and functionality (JavaScript), alongside the 'html' content. 'description' key must articulate a succinct overview of the encompassed content. This signals ongoing engagement and prompts for subsequent data retrieval:
 
     - Meticulously escape special characters (e.g., \\\", \\\\, \\n, \\t) to ensure JSON integrity and parseability.
     

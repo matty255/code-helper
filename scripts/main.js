@@ -14,6 +14,14 @@ const storedData = localStorage.getItem("conversationData")
   ? JSON.parse(localStorage.getItem("conversationData"))
   : [];
 
+function getLastTwoAddedObjects() {
+  const conversationData = conversationService.getData(
+    conversationService.dataKey
+  );
+  const lastTwoObjects = conversationData.slice(-2);
+  return lastTwoObjects;
+}
+
 const conversationService = new ConversationService("conversationData", [
   ...prompt,
   ...storedData,
@@ -29,11 +37,10 @@ let isSubmitting = false; // 중복 요청 방지를 위한 플래그
 
 async function sendRequestToApi(data, isEditorRequest = false) {
   if (isSubmitting) {
-    console.log("이미 요청이 진행 중입니다. 중복 요청을 방지합니다.");
+    // console.log("이미 요청이 진행 중입니다. 중복 요청을 방지합니다.");
     return;
   }
 
-  console.log("API 요청 시작:", data);
   isSubmitting = true;
   ChatUI.showLoadingOverlay();
 
@@ -50,44 +57,48 @@ async function sendRequestToApi(data, isEditorRequest = false) {
     conversationService.dataKey
   );
   // API 요청 시 'id' 필드 제거
-  const requestData = removeIdFromDataArray([...conversationData]);
+  const requestData = removeIdFromDataArray([
+    ...prompt,
+    ...getLastTwoAddedObjects(),
+  ]);
 
   try {
     const apiResponse = await submitDataToApi(requestData);
-    console.log("API Response:", apiResponse);
+    // console.log("API Response:", apiResponse);
     processApiResponse(apiResponse, isEditorRequest, message.id);
   } catch (error) {
     console.error("Error sending request to API:", error);
   } finally {
     ChatUI.hideLoadingOverlay();
-    console.log("API 요청 처리 완료");
+    // console.log("API 요청 처리 완료");
     isSubmitting = false;
   }
 }
 
 function processApiResponse(apiResponse, isEditorRequest, messageId) {
-  console.log("API 응답 처리 시작", apiResponse);
+  // console.log("API 응답 처리 시작", apiResponse);
   try {
     // API 응답 내용 로깅
-    console.log("API 응답 내용:", apiResponse.choices[0].message.content);
+    // console.log("API 응답 내용:", apiResponse.choices[0].message.content);
     const resultContent = ensureProperEncodingAndEscaping(
       apiResponse.choices[0].message.content
     );
     const data = JSON.parse(resultContent);
 
-    console.log("파싱된 응답 데이터:", data); // 파싱된 데이터 로깅
+    // console.log("파싱된 응답 데이터:", data); // 파싱된 데이터 로깅
 
     // 여기에 유효성 검사 로직 추가
-    if (!isEditorRequest && data && Object.keys(data).length > 0) {
+    if (data && Object.keys(data).length > 0) {
       // 유효한 데이터만 대화 목록에 추가
       conversationService.addData(apiResponse.choices[0].message);
+      loadStoredData();
     }
 
     editorService.extractAndSetCode(data);
   } catch (error) {
     console.error("API 응답 처리 중 에러 발생:", error);
   } finally {
-    console.log("API 응답 처리 완료");
+    // console.log("API 응답 처리 완료");
   }
 }
 
@@ -127,6 +138,7 @@ function handleDOMContentLoaded() {
 
 function loadStoredData() {
   const storedData = conversationService.getData(conversationService.dataKey);
+
   storedData.forEach((data) => {
     if (data.role === "user") {
       // 사용자가 질문을 삭제할 수 있도록 removeMessage 함수를 콜백으로 전달합니다.
@@ -136,6 +148,7 @@ function loadStoredData() {
       ChatUI.addAnswerToList(data, () => removeMessage(data.id));
     }
   });
+  ChatUI.scrollChatToBottom();
 }
 
 function removeMessage(id) {

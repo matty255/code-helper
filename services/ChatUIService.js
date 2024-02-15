@@ -58,7 +58,7 @@ export default class UiGenerator {
     deleteButton.innerText = "삭제";
     // Tailwind CSS 클래스 추가
     deleteButton.className =
-      "text-xs float-left bg-gray-800 text-white py-1 px-2";
+      "text-xs float-left bg-gray-800 text-white py-1 px-2 mx-2";
 
     deleteButton.addEventListener("click", () => {
       removeCallback(answer.id);
@@ -87,7 +87,7 @@ export default class UiGenerator {
     // Set the modal content
     modal.innerHTML = `
       <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close cursor-pointer">&times;</span>
         <div class="rendered-content" id="rendered-content">${content}</div>
         <div id="code-block"></div>
       </div>
@@ -109,11 +109,11 @@ export default class UiGenerator {
       codeBlock.setCursor({ line: 0, ch: 0 });
     }, 1);
 
-    // Then find the .close element
-    const span = document.querySelector(".close");
+    const closeButton = document.querySelector(".close"); // 여기를 수정했습니다.
 
     // When the user clicks on <span> (x), close the modal
-    span.onclick = function () {
+    closeButton.onclick = function () {
+      // 여기도 수정했습니다.
       modal.style.display = "none";
     };
 
@@ -144,14 +144,30 @@ export default class UiGenerator {
 
   setupTabSwitching() {
     document.querySelectorAll("#editor-tabs button").forEach((button) => {
+      const htmlButton = document.querySelector(
+        "#editor-tabs button[data-lang='html']"
+      );
+      if (htmlButton) {
+        htmlButton.classList.add("active");
+      }
       button.addEventListener("click", () => {
         if (this.editorService) {
+          // Remove 'bg-gray-400' class from all buttons
+          document.querySelectorAll("#editor-tabs button").forEach((btn) => {
+            btn.classList.remove("active");
+          });
+
+          // Add 'bg-gray-400' class to the clicked button
+          button.classList.add("active");
+
           this.selectTab(button.getAttribute("data-lang"));
         }
       });
     });
     // 페이지 로딩 시 기본 탭을 HTML로 설정
     this.selectTab("html"); // 이 부분이 기본 탭을 설정하는 로직입니다.
+
+    // Add 'bg-gray-400' class to the button with 'data-lang' attribute equal to 'html'
   }
 
   selectTab(lang) {
