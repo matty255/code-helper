@@ -1,6 +1,6 @@
 const apiUrl = `https://open-api.jejucodingcamp.workers.dev/`;
 
-export const postToApi = async (data) => {
+export const submitDataToApi = async (data) => {
   try {
     const response = await axios.post(apiUrl, data, {
       headers: { "Content-Type": "application/json" },

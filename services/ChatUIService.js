@@ -1,4 +1,4 @@
-import { parseQuestionContent } from "../utils/utils.js";
+import { isJSON, parseQuestionContent } from "../utils/utils.js";
 
 export default class UiGenerator {
   constructor() {
@@ -26,7 +26,7 @@ export default class UiGenerator {
     const li = document.createElement("li");
     li.classList.add("chat-item", "chat-question");
     li.dataset.id = question.id;
-    console.log(question.content);
+    // console.log(question.content);
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
@@ -49,7 +49,7 @@ export default class UiGenerator {
     li.classList.add("chat-item", "chat-answer");
     li.dataset.id = answer.id;
 
-    console.log(answer);
+    // console.log(answer);
 
     const deleteButton = document.createElement("button");
     deleteButton.innerText = "Delete";
@@ -59,9 +59,12 @@ export default class UiGenerator {
     });
     li.appendChild(deleteButton);
 
-    const answerText = document.createElement("span");
-    answerText.innerText = answer.content;
-    li.appendChild(answerText);
+    if (isJSON(answer.content)) {
+      // console.log(answer.content);
+      const answerText = document.createElement("span");
+      answerText.innerText = JSON.parse(answer.content).description;
+      li.appendChild(answerText);
+    }
 
     this.chatList.appendChild(li);
   }

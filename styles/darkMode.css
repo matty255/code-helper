@@ -40,6 +40,7 @@ body[data-theme="dark"] .chat-container {
 body[data-theme="dark"] .chat-item {
   background-color: #424242; /* 어두운 모드에 대한 조정 */
   color: #ccc; /* 밝은 글씨 */
+  cursor: pointer;
 }
 
 body[data-theme="dark"] .chat-question {
@@ -56,4 +57,40 @@ body[data-theme="dark"] .chat-input,
 body[data-theme="dark"] button {
   border-color: #888;
   color: #ccc; /* 다크 모드에서 입력필드 및 버튼 글씨 색상 조정 */
+}
+
+.splitter {
+  width: 10px;
+  cursor: ew-resize;
+  background-color: rosybrown; /* default to light mode */
+  position: relative;
+  z-index: 10;
+}
+
+body[data-theme="dark"] .splitter {
+  background-color: #333; /* dark mode */
+}
+
+body[data-theme="light"] .splitter {
+  background-color: rosybrown; /* light mode */
+}
+
+/* the rest of your CSS... */
+
+#iframe-container {
+  position: relative;
+}
+
+#iframe-container .splitter {
+  left: -5px;
+  top: 0;
+  bottom: 0;
+}
+
+#chat-section {
+  overflow: auto;
+}
+
+#editor-section {
+  overflow: auto;
 }
