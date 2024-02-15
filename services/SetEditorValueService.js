@@ -32,7 +32,7 @@ export default class SetEditorValueService extends EditorService {
       .filter((item) => item.role === "assistant")
       .reduce((acc, item) => {
         try {
-          // console.log("Parsing content:", item.content);
+          // // console.log("Parsing content:", item.content);
           const content = JSON.parse(item.content);
           return { ...acc, ...content };
         } catch (e) {
@@ -50,7 +50,7 @@ export default class SetEditorValueService extends EditorService {
   // HTML 내의 CSS와 JS 추출 및 해당 에디터에 설정
   extractAndSetCode(content) {
     const htmlContent = content.html || "";
-    // console.log("Extracted HTML Content:", htmlContent);
+    // // console.log("Extracted HTML Content:", htmlContent);
 
     // CSS와 JS 추출
     const cssContent = this.extractContent(htmlContent, "<style>", "</style>");
@@ -60,7 +60,7 @@ export default class SetEditorValueService extends EditorService {
     const cleanedHtmlContent = htmlContent
       .replace(/<style>[\s\S]*?<\/style>/, "")
       .replace(/<script>[\s\S]*?<\/script>/, "");
-    // console.log("Cleaned HTML Content:", cleanedHtmlContent);
+    // // console.log("Cleaned HTML Content:", cleanedHtmlContent);
 
     // 각각의 내용을 해당하는 에디터에 설정
     this.setEditorValue("html", cleanedHtmlContent);
