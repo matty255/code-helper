@@ -1,7 +1,7 @@
-// main.js
+// utils.js에서 필요한 함수들을 불러옵니다.
 import { prompt } from "../constants/prompt.js";
 import UiGenerator from "../services/ChatUIService.js";
-import ConversationService from "../services/ConversationService.js";
+import ConversationService from "../services/ConversationServices.js";
 import SetEditorValueService from "../services/SetEditorValueService.js";
 import {
   createUserData,
@@ -58,10 +58,8 @@ function loadStoredData() {
 
   storedData.forEach((data) => {
     if (data.role === "user") {
-      // console.log("Question:", data.content);
       ChatUI.addQuestionToList(data, () => removeMessage(data));
     } else if (data.role === "assistant") {
-      // console.log("Answer:", data.content);
       ChatUI.addAnswerToList(data, () => removeMessage(data));
     }
   });
@@ -72,15 +70,15 @@ function removeMessage(data) {
   ChatUI.removeMessageFromList(data.id);
 }
 
-function setupCodeSubmission() {
-  Object.values(editorService.editors).forEach((editor) => {
-    editor.setOption("extraKeys", {
-      "Ctrl-Enter": collectAndSendCode,
-    });
-  });
-}
+let isSubmitting = false; // 중복 요청 방지를 위한 플래그
 
 async function collectAndSendCode() {
+  if (isSubmitting) {
+    console.log("이미 코드 제출이 진행 중입니다. 중복 요청을 방지합니다.");
+    return;
+  }
+
+  isSubmitting = true;
   ChatUI.showLoadingOverlay();
   let codeData = editorService.collectCodeData();
   codeData = removeIdFromData(codeData);
@@ -93,33 +91,59 @@ async function collectAndSendCode() {
       createUserData(codeData),
     ]);
     conversationService.addData(createUserData(codeData));
-    // console.log("API response:", apiResponse);
     processApiResponse(apiResponse);
   } catch (error) {
     console.error("Error to API:", error);
   } finally {
     ChatUI.hideLoadingOverlay();
+    isSubmitting = false;
   }
 }
 
 function processApiResponse(apiResponse) {
-  const resultContent = ensureProperEncodingAndEscaping(
-    apiResponse.choices[0].message.content
-  );
-  const data = JSON.parse(resultContent);
+  console.log("API 응답:", apiResponse);
+  try {
+    const resultContent = ensureProperEncodingAndEscaping(
+      apiResponse.choices[0].message.content
+    );
+    const data = JSON.parse(resultContent);
 
-  // console.log(apiResponse.choices[0].message);
-
-  conversationService.addData(apiResponse.choices[0].message);
-  displayApiResponse(data, apiResponse.choices[0].message);
+    conversationService.addData(apiResponse.choices[0].message);
+    displayApiResponse(data, apiResponse.choices[0].message);
+  } catch (error) {
+    console.error("API 응답 처리 중 에러 발생:", error);
+    // 필요한 경우 여기서 에러 핸들링 로직을 추가할 수 있습니다.
+  }
 }
 
 function displayApiResponse(data, message) {
-  ChatUI.addQuestionToList(data, () => removeMessage(message));
-  ChatUI.addAnswerToList(message, () => removeMessage(message));
-  editorService.extractAndSetCode(data); // Use the class method for processing and displaying API response
+  ChatUI.addQuestionToList(
+    {
+      id: message.id,
+      content: data.html, // 질문 내용으로 description 사용
+    },
+    () => ChatUI.removeMessageFromList(message.id)
+  );
+
+  // 답변 추가 (여기서는 답변 내용을 직접 만들지 않고 클릭 이벤트를 통해 모달을 보여주는 방식을 예시로 들었습니다.)
+  ChatUI.addAnswerToList(
+    {
+      id: message.id,
+      content: JSON.stringify({ description: "자세히 보기" }), // 사용자 정의 내용
+    },
+    () => ChatUI.removeMessageFromList(message.id)
+  );
+  editorService.extractAndSetCode(data);
 }
 
-// Event listeners
+function setupCodeSubmission() {
+  Object.values(editorService.editors).forEach((editor) => {
+    editor.setOption("extraKeys", {
+      "Ctrl-Enter": collectAndSendCode,
+    });
+  });
+}
+
+// 이벤트 리스너
 window.addEventListener("load", handleWindowLoad);
 document.addEventListener("DOMContentLoaded", handleDOMContentLoaded);

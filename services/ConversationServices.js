@@ -1,4 +1,4 @@
-import LocalStorageService from "./LocalStorageService.js";
+import LocalStorageService from "./a.js";
 
 export default class ConversationService extends LocalStorageService {
   constructor(initialDataKey, initialData = {}) {
