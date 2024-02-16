@@ -161,6 +161,21 @@ flowchart TB
 - editor에서 답변을 참조하여 바로 질문하는 기능(Ctrl + Enter)
 - 실시간 입력에 따라 html 화면 미리보기 기능
 
+# 트러블슈팅
+
+- 채팅 메시지 삭제 기능 : 삭제를 하려고 채팅 데이터 배열에 id 프로퍼티를 추가 -> GPT 3.5 api 에서 요청을 거부 ->
+
+  - api 요청시 removeIdFromDataArray로 배열 내의 id를 제거하고 보내기
+  - LocalStorageService class를 확장한 ConversationService class를 만들어 api response를 배열에 합칠 때 유니크한 id 프로퍼티를 주가
+
+- max-token error : 개인화되는 프롬프트를 위해 요청시 api response format을 강제할 system prompt와 지금까지의 대화기록을 전송 ->
+
+  - system prompt와 마지막 2개의 대화기록만을 보내는 것으로 변경
+  - 그러나 1개의 요청으로도 max-token은 될 수 있으니 api를 상위티어로 변경할 수 있겠음
+
+- editor에 html, js, css를 분리하여 전송 : api response와, local storage에 저장되어 있는 대화기록의 마지막 answer:html을 호출시 js, css가 분리되지 않음
+  - editorService class를 확장한 setEditorValueService class를 만들어 값을 지정하는 부분을 고도화하였음
+
 ## 시작하기
 
 Code Helper를 시작하려면 이 저장소를 클론하고 `index.html`을 브라우저에서 열어보세요. GPT-3.5 API와 통신하기 위해 인터넷 접속이 필요합니다. git page에서 열 수 있습니다.
