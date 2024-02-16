@@ -1,5 +1,5 @@
 function toggleMoveElement(toggleButtonSelector, targetSelector, direction) {
-  var isVisible = true; // 초기 상태는 보이는 상태로 설정
+  let isVisible = true; // 초기 상태는 보이는 상태로 설정
 
   $(toggleButtonSelector).click(function () {
     if (isVisible) {
@@ -25,7 +25,7 @@ function toggleMoveElement(toggleButtonSelector, targetSelector, direction) {
 
 $(document).ready(function () {
   // 채팅 섹션을 왼쪽으로 이동
-  var isMobile = window.matchMedia("screen and (max-width: 767px)").matches;
+  let isMobile = window.matchMedia("screen and (max-width: 767px)").matches;
   if (!isMobile) {
     toggleMoveElement("#toggle-chat", "#chat-section", 100);
   }

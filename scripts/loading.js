@@ -21,7 +21,7 @@ window.onload = function () {
   animateLoadingText();
 
   // 로딩 요소 숨김 처리
-  var loadingElement = document.getElementById("global-loading");
+  let loadingElement = document.getElementById("global-loading");
   if (loadingElement) {
     loadingElement.classList.add("a11y"); // 'a11y' 클래스를 추가하여 접근성을 고려한 숨김 처리를 함
   }
