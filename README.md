@@ -28,7 +28,7 @@ code-helper는 호기심에서 시작된 프로젝트이자 웹 개발의 기본
 
 ## Demo
 
-[라이브 데모 링크](matty255.github.io/code-helper/)
+[라이브 데모 링크](https://matty255.github.io/code-helper/)
 
 ## 일정
 
