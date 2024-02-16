@@ -161,20 +161,13 @@ flowchart TB
 - editor에서 답변을 참조하여 바로 질문하는 기능(Ctrl + Enter)
 - 실시간 입력에 따라 html 화면 미리보기 기능
 
-# 트러블슈팅
+# 트러블슈팅 로그
 
-- 채팅 메시지 삭제 기능 : 삭제를 하려고 채팅 데이터 배열에 id 프로퍼티를 추가 -> GPT 3.5 api 에서 요청을 거부 ->
-
-  - api 요청시 removeIdFromDataArray로 배열 내의 id를 제거하고 보내기
-  - LocalStorageService class를 확장한 ConversationService class를 만들어 api response를 배열에 합칠 때 유니크한 id 프로퍼티를 주가
-
-- max-token error : 개인화되는 프롬프트를 위해 요청시 api response format을 강제할 system prompt와 지금까지의 대화기록을 전송 ->
-
-  - system prompt와 마지막 2개의 대화기록만을 보내는 것으로 변경
-  - 그러나 1개의 요청으로도 max-token은 될 수 있으니 api를 상위티어로 변경할 수 있겠음
-
-- 초기 값 세팅 및 api 응답값 세팅 : editor에 html, css, js가 분리되지 않고 들어감 ->
-  - editorService class를 확장한 setEditorValueService class를 만들어 값을 지정하는 부분을 고도화하였음
+| 문제                                 | 원인                                                               | 해결방안                                                                                                                                                                                                         |
+| ------------------------------------ | ------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 채팅 메시지 삭제 기능                | 채팅 데이터 배열에 `id` 프로퍼티 추가 시 GPT 3.5 API에서 요청 거부 | - `removeIdFromDataArray` 함수를 사용하여 API 요청 시 배열 내의 `id` 제거<br>- `LocalStorageService` 클래스를 확장한 `ConversationService` 클래스 생성하여 API 응답을 배열에 합칠 때 유니크한 `id` 프로퍼티 추가 |
+| max-token error                      | 개인화된 프롬프트와 지금까지의 대화 기록을 전송하려 할 때 발생     | - 시스템 프롬프트와 마지막 2개의 대화 기록만 전송으로 변경<br>- 필요 시 API를 상위 티어로 업그레이드                                                                                                             |
+| 초기 값 세팅 및 API 응답값 세팅 문제 | Editor에 HTML, CSS, JS가 분리되지 않고 들어감                      | `EditorService` 클래스를 확장한 `SetEditorValueService` 클래스 생성하여 값을 지정하는 부분 고도화                                                                                                                |
 
 ## 시작하기
 
