@@ -37,7 +37,6 @@ let isSubmitting = false; // 중복 요청 방지를 위한 플래그
 
 async function sendRequestToApi(data, isEditorRequest = false) {
   if (isSubmitting) {
-    // console.log("이미 요청이 진행 중입니다. 중복 요청을 방지합니다.");
     return;
   }
 
@@ -64,28 +63,23 @@ async function sendRequestToApi(data, isEditorRequest = false) {
 
   try {
     const apiResponse = await submitDataToApi(requestData);
-    // console.log("API Response:", apiResponse);
+
     processApiResponse(apiResponse, isEditorRequest, message.id);
   } catch (error) {
     console.error("Error sending request to API:", error);
   } finally {
     ChatUI.hideLoadingOverlay();
-    // console.log("API 요청 처리 완료");
+
     isSubmitting = false;
   }
 }
 
 function processApiResponse(apiResponse, isEditorRequest, messageId) {
-  // console.log("API 응답 처리 시작", apiResponse);
   try {
-    // API 응답 내용 로깅
-    // console.log("API 응답 내용:", apiResponse.choices[0].message.content);
     const resultContent = ensureProperEncodingAndEscaping(
       apiResponse.choices[0].message.content
     );
     const data = JSON.parse(resultContent);
-
-    // console.log("파싱된 응답 데이터:", data); // 파싱된 데이터 로깅
 
     // 여기에 유효성 검사 로직 추가
     if (data && Object.keys(data).length > 0) {
@@ -98,7 +92,7 @@ function processApiResponse(apiResponse, isEditorRequest, messageId) {
   } catch (error) {
     console.error("API 응답 처리 중 에러 발생:", error);
   } finally {
-    // console.log("API 응답 처리 완료");
+    ChatUI.scrollChatToBottom();
   }
 }
 
