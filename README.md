@@ -68,6 +68,31 @@ gantt
 
 ## 폴더 구조
 
+```
+📦constants
+ ┣ 📜htmlTags.js
+ ┗ 📜prompt.js
+ 📦services
+ ┣ 📜ChatUIService.js
+ ┣ 📜ConversationServices.js
+ ┣ 📜EditorService.js
+ ┣ 📜LocalStorageService.js
+ ┗ 📜SetEditorValueService.js
+📦scripts
+ ┣ 📜apiRequests.js
+ ┣ 📜buttonToggle.js
+ ┣ 📜loading.js
+ ┣ 📜main.js
+ ┣ 📜setCustomHint.js
+ ┣ 📜splitterHandler.js
+ ┗ 📜themeToggle.js
+ 📦styles
+ ┣ 📜common.css
+ ┣ 📜darkMode.css
+ ┣ 📜index.css
+ ┗ 📜reset.css
+```
+
 - `./assets`: 프로젝트에 들어가는 asset 파일을 보관합니다.
 - `./constants`: 프로젝트 설정을 위한 상수 값을 보관합니다.
 - `./services`: 클래스로 만들어 재사용할 객체들을 여기에 보관합니다.
