@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="./styles/darkMode.css" />
     <link rel="stylesheet" href="./styles/common.css" />
     <link rel="stylesheet" href="./styles/index.css" />
-    <!-- CodeMirror 핵심 스타일시트 -->
+
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css"
@@ -31,12 +31,10 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/6.65.7/theme/juejin.min.css"
     />
-    <!-- 힌트 기능을 위한 스타일시트 -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/hint/show-hint.min.css"
     />
-    <!-- Codemirror Lint CSS -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/lint/lint.min.css"
@@ -66,20 +64,19 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/css/css.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/mode/htmlmixed/htmlmixed.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.61.0/addon/mode/multiplex.min.js"></script>
-    <script type="module" src="./tailwind.config.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.12.2/lottie.min.js"></script>
+
     <!-- 추가적인 스크립트 링크 -->
   </head>
   <body data-theme="dark" class="w-full text-gray-300">
-    <div id="global-loading" class="flex flex-col">
-      <img
-        src="./assets/images/banners/[code-helper]logo.png"
-        alt="로딩중입니다."
-      />
+    <aside id="global-loading" class="flex flex-col">
+      <img src="./assets/images/banners/[code-helper]logo.png" alt="" />
       <p>loading...</p>
-    </div>
-    <h1 class="a11y">코드 헬퍼</h1>
-    <div class="loading-overlay fixed">로딩중입니다.</div>
+    </aside>
+    <header>
+      <h1 class="a11y">코드 헬퍼</h1>
+      <p class="loading-overlay fixed">로딩중입니다.</p>
+    </header>
+
     <main class="md:flex">
       <section
         id="chat-section"
@@ -89,7 +86,8 @@
           class="chat-list list-none p-0 m-0 overflow-auto max-h-full flex-1"
         ></ul>
 
-        <div class="form-container">
+        <article class="form-container">
+          <h2 class="a11y">채팅 입력창</h2>
           <form id="codeSubmissionForm" class="chat-form flex items-end pb-9">
             <input
               id="description"
@@ -107,19 +105,21 @@
               전송
             </button>
           </form>
-        </div>
+        </article>
       </section>
 
-      <div class="splitter"></div>
+      <hr class="splitter" />
       <section
         id="editor-section"
         class="h-screen w-full md:w-1/2 fixed top-0 left-0 md:static"
       >
-        <div id="editor-tabs" class="w-full pl-7 sticky top-0">
+        <article id="editor-tabs" class="w-full pl-7 sticky top-0">
+          <h2 class="a11y">에디터 탭</h2>
           <button class="px-8 tab-button" data-lang="html">HTML</button>
           <button class="px-8 tab-button" data-lang="css">CSS</button>
           <button class="px-8 tab-button" data-lang="js">JS</button>
-        </div>
+        </article>
+
         <textarea id="html-editor" class="h-screen"></textarea>
         <textarea
           id="css-editor"
@@ -131,9 +131,13 @@
           class="h-screen"
           style="display: none"
         ></textarea>
-        <div class="modal" style="display: none">
-          <div class="modal-content"><span class="close">&times;</span></div>
-        </div>
+
+        <aside class="modal" style="display: none">
+          <article class="modal-content">
+            <h2 class="a11y">모달창</h2>
+            <span class="close">&times;</span>
+          </article>
+        </aside>
       </section>
 
       <iframe
@@ -141,9 +145,13 @@
         class="fixed top-0 left-0 w-full xl:static xl:w-1/2 h-screen border border-gray-300 mt-5 bg-white z-10 transition-all duration-500 translate-x-full xl:translate-x-0"
       ></iframe>
     </main>
+
     <footer
       class="fixed bottom-10 w-full text-right fixed bottom-0 right-10 z-10 h-8 md:w-1/3"
     >
+      <small class="text-gray-300 fixed bottom-2 left-5"
+        >© 2024. Code Helper</small
+      >
       <button
         class="theme-toggle mx-auto cursor-pointer rounded-full bg-[#bc8f8f] py-2 px-4 hover:bg-[#b28484] transition-all duration-500"
       >
@@ -164,17 +172,12 @@
       </button>
     </footer>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.8/purify.min.js"
-      integrity="sha512-5g2Nj3mqLOgClHi20oat1COW7jWvf7SyqnvwWUsMDwhjHeqeTl0C+uzjucLweruQxHbhDwiPLXlm8HBO0011pA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
 
+    <script src="./tailwind.config.js"></script>
     <script type="module" src="./scripts/main.js"></script>
     <script src="./scripts/themeToggle.js"></script>
-    <script src="./scripts/getAdjustElement.js"></script>
+    <script src="./scripts/splitterHandler.js"></script>
     <script src="./scripts/loading.js"></script>
-    <script src="./scripts/getAdjustMobileChat.js"></script>
+    <script src="./scripts/buttonToggle.js"></script>
   </body>
 </html>
