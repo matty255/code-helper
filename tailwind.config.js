@@ -7,6 +7,7 @@ tailwind.config = {
       },
       colors: {
         clifford: "#da373d",
+        pink: "#ff4c60",
       },
     },
   },
