@@ -86,11 +86,15 @@ export default class UiGenerator {
 
     // Set the modal content
     modal.innerHTML = `
-      <div class="modal-content">
+      <section class="modal-content">
         <span class="close cursor-pointer">&times;</span>
-        <div class="rendered-content" id="rendered-content">${content}</div>
-        <div id="code-block"></div>
-      </div>
+        <article class="rendered-content" id="rendered-content">
+        <h3 class="a11y">미리보기</h3>
+        ${content}</article>
+        <article id="code-block">
+        <h3 class="a11y">코드블록</h3>
+        </article>
+      </section>
     `;
 
     modal.style.display = "block";

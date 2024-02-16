@@ -1,4 +1,4 @@
-# Code Helper: Real-time GPT-3.5 Integration for Code Editors
+# Code Helper: GPT-3.5 Integration for Code Editors
 
 ![code-helper](./assets/images/banners/[code-helper]banner.png)
 
@@ -8,7 +8,7 @@ Code Helper는 간단한 코드 플레이 그라운드에 GPT-3.5를 직접 통�
 
 `code-helper` 이 프로젝트를 시작한 건, 간단한 궁금증에서 비롯되었습니다.
 
-> "`NO Module`로 과연 어디까지 할 수 있을까?"
+> "`cdn`만으로 과연 어디까지 할 수 있을까?"
 
 이 호기심은 순수한 JavaScript, HTML, CSS만을 이용해 어떤 멋진 것들을 만들 수 있을지 탐구하는 의미로 제작되었습니다.
 
@@ -25,6 +25,10 @@ code-helper는 호기심에서 시작된 프로젝트이자 웹 개발의 기본
 - **실시간 코드 제안**: GPT-3.5의 제안을 활용해 자연어 타이핑으로 코드 제안을 받습니다.
 - **디버깅 지원**: 문제를 설명하여 GPT 모델로부터 디버깅 도움을 받습니다.
 - **맞춤형 통합**: 로컬에서 개인화된 프롬프트 학습이 가능합니다.
+
+## Demo
+
+[라이브 데모 링크](matty255.github.io/code-helper/)
 
 ## 일정(진행중)
 
@@ -56,9 +60,9 @@ gantt
     UI 프로토타입 제작         :done,         des12, after des11, 4h
 
     section 프로젝트 리뷰 및 마무리
-    코드 리뷰                 :         des13, 02-16, 2h
-    최종 테스트               :         des14, after des13, 2h
-    배포 준비                 :         des15, after des14, 2h
+    코드 리뷰                 :done,          des13, 02-16, 2h
+    최종 테스트               :done,          des14, after des13, 2h
+    배포 준비                 :done,          des15, after des14, 2h
 
 ```
 
@@ -107,7 +111,6 @@ flowchart TB
 - **TailwindCSS**: TailwindCSS는 유틸리티 퍼스트 접근 방식을 채택한 CSS 프레임워크로, 개발자가 HTML 문서 내에 직접 스타일 클래스를 적용함으로써, 복잡한 디자인 시스템을 신속하게 구현할 수 있게 합니다. 비록 cdn이라 purge나 custom 기능은 사용하지 못했지만, 강력한 UI를 신속하게 구축할 수 있다는 점에서 망설이지 않고 선택했습니다.
 - **Axios**: Axios는 프로미스 기반의 HTTP 클라이언트로, 브라우저와 Node.js 환경 모두에서 사용할 수 있습니다. 이 프로젝트에서는 외부 API와의 통신을 위해 Axios를 활용하여, 비동기 방식으로 데이터를 손쉽게 요청하고 응답을 처리합니다. Axios의 사용은 API 상호작용의 복잡성을 줄이고, 코드의 가독성과 유지 보수성을 향상시킵니다. 사실 한 군데서만 쓴거라 fetch를 썼어도 되었겠지만 fetch보다 axios를 먼저 배운터라 편해서 썼습니다.
 - **CodeMirror**: CodeMirror는 웹 기반 프로젝트에서 코드를 편집할 때 필요한 다양한 기능을 제공하는 리치 텍스트 에디터입니다. 구문 강조, 코드 접기, 테마 변경 등 다양한 기능을 지원하여 개발자가 코드를 더 효과적으로 작성하고 수정할 수 있도록 돕습니다. `code-helper` 프로젝트에서는 사용자에게 친숙한 코드 편집 환경을 제공하기 위해 이 라이브러리를 채택했습니다. v6은 역시 대세에 발맞추어 거의 모든 기능이 모듈화되었기 때문에 v5를 사용하고 css 파일만 v6을 가져다 썼습니다.
-- **DOMPurify**: 웹 애플리케이션에서 크로스 사이트 스크립팅(XSS) 공격을 방지하기 위해 DOMPurify를 사용합니다. 이 라이브러리는 HTML, SVG 및 MathML을 정화하여 안전하지 않은 코드를 제거하고, 신뢰할 수 있는 콘텐츠만을 문서에 삽입할 수 있도록 합니다. `code-helper`는 모든 입력 데이터에 대해 DOMPurify를 적용함으로써 보안성을 강화했습니다. 사실 GPT 3.5에 요청을 보내면 거기에서 보안을 유지하긴 할 것입니다.
 - **jQuery**: jQuery는 빠르고, 작고, 풍부한 기능을 가진 JavaScript 라이브러리입니다. 복잡한 JavaScript 코드를 간결하고 쉽게 작성할 수 있게 해주며, 이벤트 처리, 애니메이션, AJAX 호출 등을 간편하게 구현할 수 있습니다. `code-helper` 프로젝트에서는 jQuery를 사용하여 DOM 조작과 이벤트 핸들링을 더욱 쉽고 효율적으로 만들어, 개발 과정을 간소화하고 사용자 경험을 향상시켰습니다.
 
 ## 디자인

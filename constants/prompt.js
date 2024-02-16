@@ -15,13 +15,13 @@ export const prompt = [
   {
     id: "system-prompt-2",
     role: "user",
-    content:
-      "Create a sophisticated website featuring a cat, including interactive elements.",
+    content: "고양이 사진이 있는 간단한 웹사이트를 만들어주세요.",
   },
   {
     id: "system-prompt-3",
     role: "assistant",
-    content: `{"description": "고양이 이미지를 포함한 간단한 HTML 컨텐츠입니다.", "html": "<!DOCTYPE html>\\n<html lang=\\"en\\">\\n<head>\\n  <meta charset=\\"UTF-8\\">\\n  <title>고양이</title>\\n  <style>\\n    img {\\n      width: 300px;\\n      height: auto;\\n      display: block;\\n      margin: 0 auto;\\n    }\\n  </style>\\n</head>\\n<body>\\n  <h1>고양이 사진</h1>\\n  <img src=\\"https://placekitten.com/400/300\\" alt=\\"고양이 사진\\">\\n</body>\\n</html>"}`,
+    content:
+      '{"description": "사용 방법 설명서.", "html": "\\n<!DOCTYPE html>\\n<html lang=\\"ko\\">\\n<head>\\n  <meta charset=\\"UTF-8\\">\\n  <title>고양이</title>\\n  <style>\\n    img {\\n      width: 300px;\\n      height: auto;\\n      display: block;\\n      margin: 0 auto;\\n    }\\n  </style>\\n</head>\\n<body>\\n  <h1>사용 방법</h1>\\n  <!-- 왼쪽의 채팅창에서는 \'전송\' 버튼 onClick과 submit: enter를 지원합니다. -->\\n  <!-- 여기 에디터에서는 ctrl + enter로 즉시 전송 기능을 제공합니다. -->\\n  <!-- 오른쪽의 미리보기에서는 실시간으로 html의 현재 구현을 볼 수 있습니다. -->\\n <!-- 출력 관련 에러가 발생한다면 개발자도구를 열고 애플리케이션에서 저장되어 있는 로컬 스토리지 값 : conversationData를 삭세하고 다시 시도해보세요. -->\\n  <img src=\\"https://placekitten.com/400/300\\" alt=\\"고양이 사진\\">\\n</body>\\n</html>\\n"}',
   },
 ];
 
