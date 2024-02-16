@@ -173,7 +173,7 @@ flowchart TB
   - system prompt와 마지막 2개의 대화기록만을 보내는 것으로 변경
   - 그러나 1개의 요청으로도 max-token은 될 수 있으니 api를 상위티어로 변경할 수 있겠음
 
-- editor에 html, js, css를 분리하여 전송 : api response와, local storage에 저장되어 있는 대화기록의 마지막 answer:html을 호출시 js, css가 분리되지 않음
+- 초기 값 세팅 및 api 응답값 세팅 : editor에 html, css, js가 분리되지 않고 들어감 ->
   - editorService class를 확장한 setEditorValueService class를 만들어 값을 지정하는 부분을 고도화하였음
 
 ## 시작하기
